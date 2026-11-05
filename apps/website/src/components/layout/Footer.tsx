@@ -20,13 +20,11 @@ export const Footer: React.FC = () => (
       <nav aria-label="Trang" className="text-sm">
         <h2 className="eyebrow text-paper/50">Trang</h2>
         <ul className="mt-4 space-y-2.5">
-          <li><a href="#download" className={link}>Tải về</a></li>
+          <li><a href="#about" className={link}>Giới thiệu</a></li>
+          <li><a href="#download" className={link}>Tải xuống</a></li>
+          <li><a href="#support" className={link}>Ủng hộ</a></li>
           <li><a href="#features" className={link}>Tính năng</a></li>
-          <li>
-            <a href="#support" className={link}>
-              Ủng hộ
-            </a>
-          </li>
+          <li><a href="#community" className={link}>Cộng đồng</a></li>
         </ul>
       </nav>
 

@@ -3,7 +3,9 @@ import './App.css';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { HeroSection } from '@/components/sections/HeroSection';
+import { AboutSection } from '@/components/sections/AboutSection';
 import { FeaturesSection } from '@/components/sections/FeaturesSection';
+import { CommunitySection } from '@/components/sections/CommunitySection';
 import { DownloadSection } from '@/components/sections/DownloadSection';
 import { SupportSection } from '@/components/sections/SupportSection';
 import { FALLBACK_DATA, getDownloadData } from '@/services/downloadService';
@@ -67,6 +69,7 @@ export default function App() {
           detected={detected}
           onSelectPlatform={handleSelectPlatform}
         />
+        <AboutSection />
         <DownloadSection
           data={data}
           loading={loading}
@@ -74,8 +77,9 @@ export default function App() {
           onPlatformChange={setSelectedPlatform}
           detected={detected}
         />
-        <FeaturesSection />
         <SupportSection />
+        <FeaturesSection />
+        <CommunitySection />
       </main>
 
       {!introDone && <Intro onDone={() => setIntroDone(true)} />}

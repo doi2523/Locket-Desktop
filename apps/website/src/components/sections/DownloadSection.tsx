@@ -103,7 +103,7 @@ function FileCard({ file, delay }: { file: DownloadFile; delay: number }) {
           ) : (
             <>
               <Download className="cta-arrow size-5" aria-hidden="true" />
-              Tải về <span className="font-mono text-[0.85em] opacity-70">.{file.format}</span>
+              Tải xuống <span className="font-mono text-[0.85em] opacity-70">.{file.format}</span>
             </>
           )}
         </a>
@@ -196,10 +196,10 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ data, loading,
     <section id="download" aria-labelledby="download-title" className="relative z-10 mx-2 rounded-[2rem] bg-paper text-ink sm:mx-4 sm:rounded-[3rem]">
       <div className="mx-auto max-w-5xl space-y-6 px-5 py-12 sm:space-y-8 sm:px-8 sm:py-16">
         <div className="reveal max-w-2xl">
-          <p className="eyebrow text-ink/60">Tải về</p>
-          <h2 id="download-title" className="t-h2 mt-3">
-            Chọn máy của bạn
+          <h2 id="download-title" className="t-h2">
+            Tải xuống
           </h2>
+          <p className="t-sub mt-3">Chọn máy của bạn</p>
           <p className="t-lead mt-4 text-ink/75">Mọi tệp đều được phát hành chính thức trên GitHub Releases. Miễn phí, không quảng cáo.</p>
         </div>
 

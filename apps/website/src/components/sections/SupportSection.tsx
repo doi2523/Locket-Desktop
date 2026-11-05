@@ -29,13 +29,15 @@ function CopyAccount() {
 }
 
 export const SupportSection: React.FC = () => (
-  <section id="support" aria-labelledby="support-title" className="relative z-10 pb-14 pt-10 sm:pb-16 sm:pt-14">
+  <section id="support" aria-labelledby="support-title" className="relative z-10 pb-6 pt-14 sm:pb-8 sm:pt-20">
     <div className="mx-auto max-w-7xl px-5 sm:px-8">
       <div className="reveal max-w-3xl">
-        <p className="eyebrow text-heart">Ủng hộ</p>
-        <h2 id="support-title" className="t-h2 mt-3 text-paper">
-          Một cốc cà phê cho <span className="text-butter">người làm ra nó.</span>
+        <h2 id="support-title" className="t-h2 text-heart">
+          Ủng hộ
         </h2>
+        <p className="t-sub mt-3 text-paper">
+          Một cốc cà phê cho <span className="text-butter">người làm ra nó.</span>
+        </p>
         <p className="t-lead mt-4 text-paper/75">
           Locket Dio Desktop là dự án cộng đồng, do một người phát triển và duy trì. Ủng hộ giúp dự án có thêm thời gian cho tính năng mới. Không ủng hộ cũng không sao, bạn vẫn dùng đầy đủ.
         </p>

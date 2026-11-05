@@ -69,13 +69,15 @@ const FEATURES: Feature[] = [
 ];
 
 export const FeaturesSection: React.FC = () => (
-  <section id="features" aria-labelledby="features-title" className="relative z-10 pb-8 pt-14 sm:pb-10 sm:pt-20">
+  <section id="features" aria-labelledby="features-title" className="relative z-10 pb-6 pt-10 sm:pb-8 sm:pt-14">
     <div className="mx-auto max-w-7xl px-5 sm:px-8">
       <div className="reveal max-w-3xl">
-        <p className="eyebrow text-heart">Tính năng</p>
-        <h2 id="features-title" className="t-h2 mt-3 text-paper">
-          Mọi thứ của Locket, <span className="text-butter">rộng chỗ hơn.</span>
+        <h2 id="features-title" className="t-h2 text-heart">
+          Tính năng
         </h2>
+        <p className="t-sub mt-3 text-paper">
+          Mọi thứ của Locket, <span className="text-butter">rộng chỗ hơn.</span>
+        </p>
       </div>
 
       <ul className="mt-8 grid sm:mt-10 grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-6">

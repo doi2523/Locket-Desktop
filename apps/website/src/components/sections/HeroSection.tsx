@@ -104,7 +104,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ release, platforms, de
                     <Icon className="size-6 shrink-0" />
                     <span className="text-left leading-tight">
                       <span className="block text-[11px] font-medium uppercase tracking-wider opacity-70">
-                        {primary && detected ? 'Dành cho máy của bạn' : 'Tải về cho'}
+                        {primary && detected ? 'Dành cho máy của bạn' : 'Tải xuống cho'}
                       </span>
                       <span className="block text-lg">
                         {label} <span className="font-mono text-sm opacity-60">{ext}</span>
