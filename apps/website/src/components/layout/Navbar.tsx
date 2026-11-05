@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { Download, Heart, Menu, X } from 'lucide-react';
+import { Download, Heart, Menu, Star, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { GithubIcon } from '@/components/icons/GithubIcon';
+import { getStarCount } from '@/services/downloadService';
 
 const LINKS = [
   { href: '#download', label: 'Tải về' },
@@ -13,6 +14,13 @@ const DONATE_HREF = '#support';
 export const Navbar: React.FC = () => {
   const [open, setOpen] = React.useState(false);
   const [scrolled, setScrolled] = React.useState(false);
+  const [stars, setStars] = React.useState<number | null>(null);
+
+  React.useEffect(() => {
+    const controller = new AbortController();
+    getStarCount(controller.signal).then(setStars);
+    return () => controller.abort();
+  }, []);
 
   React.useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 16);
@@ -62,10 +70,16 @@ export const Navbar: React.FC = () => {
             href="https://github.com/doi2523/Locket-Desktop"
             target="_blank"
             rel="noreferrer"
-            aria-label="Mã nguồn trên GitHub"
-            className="hidden rounded-full p-2.5 text-paper/80 transition-colors hover:bg-paper/10 hover:text-paper sm:inline-flex"
+            aria-label={stars === null ? "Mã nguồn trên GitHub" : `Mã nguồn trên GitHub, ${stars} sao`}
+            className="hidden items-center gap-2 rounded-full p-2.5 text-paper/80 transition-colors hover:bg-paper/10 hover:text-paper sm:inline-flex"
           >
             <GithubIcon className="size-5" />
+            {stars !== null && (
+              <span className="inline-flex items-center gap-1 pr-1 text-sm font-semibold tabular-nums">
+                <Star className="size-3.5 fill-butter text-butter" aria-hidden="true" />
+                {stars.toLocaleString("vi-VN")}
+              </span>
+            )}
           </a>
           <Button asChild variant="glow" size="sm" className="h-10 px-4">
             <a href="#download">

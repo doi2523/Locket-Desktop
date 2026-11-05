@@ -69,7 +69,7 @@ const FEATURES: Feature[] = [
 ];
 
 export const FeaturesSection: React.FC = () => (
-  <section id="features" aria-labelledby="features-title" className="relative z-10 scroll-mt-16 pb-8 pt-14 sm:pb-10 sm:pt-20">
+  <section id="features" aria-labelledby="features-title" className="relative z-10 pb-8 pt-14 sm:pb-10 sm:pt-20">
     <div className="mx-auto max-w-7xl px-5 sm:px-8">
       <div className="reveal max-w-3xl">
         <p className="eyebrow text-heart">Tính năng</p>

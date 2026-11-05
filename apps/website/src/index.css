@@ -119,7 +119,7 @@
   html {
     @apply font-sans;
     scroll-behavior: smooth;
-    scroll-padding-top: 5rem;
+    scroll-padding-top: 4rem; /* = chiều cao header, section dừng sát mép dưới header */
     -webkit-text-size-adjust: 100%;
   }
   body {

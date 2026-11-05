@@ -29,7 +29,7 @@ function CopyAccount() {
 }
 
 export const SupportSection: React.FC = () => (
-  <section id="support" aria-labelledby="support-title" className="relative z-10 scroll-mt-16 pb-14 pt-10 sm:pb-16 sm:pt-14">
+  <section id="support" aria-labelledby="support-title" className="relative z-10 pb-14 pt-10 sm:pb-16 sm:pt-14">
     <div className="mx-auto max-w-7xl px-5 sm:px-8">
       <div className="reveal max-w-3xl">
         <p className="eyebrow text-heart">Ủng hộ</p>

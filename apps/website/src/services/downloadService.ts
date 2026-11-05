@@ -132,3 +132,32 @@ export const FALLBACK_DATA: DownloadData = {
   platforms: buildPlatforms([]),
   release: FALLBACK_RELEASE,
 };
+
+const STARS_KEY = 'locket-gh-stars';
+
+/** Số sao của repo. Trả null nếu không lấy được (hết giới hạn API, mất mạng...). */
+export async function getStarCount(signal?: AbortSignal): Promise<number | null> {
+  try {
+    const cached = sessionStorage.getItem(STARS_KEY);
+    if (cached) return Number(cached);
+  } catch {
+    /* storage bị chặn */
+  }
+  try {
+    const res = await fetch(`https://api.github.com/repos/${REPO}`, {
+      signal,
+      headers: { Accept: 'application/vnd.github+json' },
+    });
+    if (!res.ok) return null;
+    const { stargazers_count } = (await res.json()) as { stargazers_count?: number };
+    if (typeof stargazers_count !== 'number') return null;
+    try {
+      sessionStorage.setItem(STARS_KEY, String(stargazers_count));
+    } catch {
+      /* bỏ qua */
+    }
+    return stargazers_count;
+  } catch {
+    return null;
+  }
+}
