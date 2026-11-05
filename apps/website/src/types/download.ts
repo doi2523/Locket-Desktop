@@ -1,37 +1,39 @@
-export interface DownloadStats {
-  totalDownloads: number;
-  windowsDownloads: number;
-  macosDownloads: number;
-  latestVersion: string;
-  releaseDate: string;
-  rating: number;
-  reviewsCount: number;
-  activeUsers: number;
-  githubStars: number;
-}
+export type PlatformId = 'windows' | 'macos';
 
 export interface DownloadFile {
   id: string;
   name: string;
   filename: string;
   format: 'exe' | 'zip' | 'dmg';
-  size: string;
   downloadUrl: string;
   recommended?: boolean;
   description: string;
-  checksum: string;
-  downloadsCount: number;
+  /** Các trường dưới đây chỉ có khi GitHub Releases trả về dữ liệu thật. */
+  size?: string;
+  checksum?: string;
+  downloadsCount?: number;
 }
 
 export interface PlatformDownload {
-  platform: 'windows' | 'macos';
+  platform: PlatformId;
   name: string;
-  icon: 'windows' | 'apple';
   osRequirement: string;
-  architecture: string;
-  latestVersion: string;
-  releaseDate: string;
   files: DownloadFile[];
   installSteps: string[];
 }
 
+export interface ReleaseInfo {
+  /** null khi repo chưa có release nào hoặc không gọi được GitHub. */
+  version: string | null;
+  publishedAt: string | null;
+  notes: string | null;
+  url: string;
+  totalDownloads: number | null;
+}
+
+export interface DownloadData {
+  platforms: PlatformDownload[];
+  release: ReleaseInfo;
+  /** 'live' = dữ liệu từ GitHub; 'fallback' = chỉ có liên kết tải mới nhất. */
+  source: 'live' | 'fallback';
+}

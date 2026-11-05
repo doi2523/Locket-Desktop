@@ -1,153 +1,161 @@
 import * as React from 'react';
-import { Apple, ArrowRight, CheckCircle2, Download, Monitor, ShieldCheck, Sparkles } from 'lucide-react';
+import { ArrowDown, Download } from 'lucide-react';
+import { AppleIcon, WindowsIcon } from '@/components/icons/PlatformIcons';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import type { DownloadStats } from '@/types/download';
+import { formatDate } from '@/lib/utils';
+import type { PlatformDownload, PlatformId, ReleaseInfo } from '@/types/download';
 
 interface HeroSectionProps {
-  stats: DownloadStats;
-  onSelectPlatform: (platform: 'windows' | 'macos') => void;
+  release: ReleaseInfo;
+  platforms: PlatformDownload[];
+  detected: PlatformId | null;
+  onSelectPlatform: (platform: PlatformId) => void;
 }
 
-export const HeroSection: React.FC<HeroSectionProps> = ({ stats, onSelectPlatform }) => {
-  return (
-    <section id="hero" className="relative min-h-screen flex items-center pt-28 pb-20">
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        <div className="text-center max-w-4xl mx-auto space-y-6">
-          {/* Top Announcement Badge */}
-          <div className="inline-flex items-center gap-2">
-            <Badge
-              variant="amber"
-              className="px-4 py-1.5 text-xs sm:text-sm font-semibold rounded-full border-0 bg-amber-500/15 backdrop-blur-md"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-amber-500 animate-pulse" />
-              <span>Phiên bản mới {stats.latestVersion} chính thức ra mắt</span>
-              <span className="text-muted-foreground hidden sm:inline">• Miễn phí 100%</span>
-            </Badge>
-          </div>
+const PLATFORM = {
+  macos: { Icon: AppleIcon, label: 'macOS', ext: '.dmg' },
+  windows: { Icon: WindowsIcon, label: 'Windows', ext: '.exe' },
+} as const;
 
-          {/* Main Headline */}
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-foreground leading-[1.15]">
-            Locket Ngay Trên{' '}
-            <span className="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 bg-clip-text text-transparent">
-              Màn Hình Máy Tính
+const PRINTS = [
+  {
+    src: '/screenshots/02_chat_feed.png',
+    alt: 'Màn hình chat của Locket Dio: danh sách hội thoại, tin nhắn và moment được chia sẻ',
+    caption: 'Chat · tin nhắn',
+    cls: 'left-0 top-[8%] w-[64%] z-20',
+    rot: '-4deg',
+    depth: 10,
+    delay: '0.25s',
+  },
+  {
+    src: '/screenshots/03_locket_feed.png',
+    alt: 'Feed Locket trên máy tính với bộ lọc bạn bè',
+    caption: 'Feed · moment của bạn bè',
+    cls: 'right-0 top-0 w-[54%] z-10',
+    rot: '6deg',
+    depth: 20,
+    delay: '0.45s',
+  },
+  {
+    src: '/screenshots/04_post_moment_editor.png',
+    alt: 'Studio đăng moment với khung xem trước điện thoại',
+    caption: 'Studio · đăng moment',
+    cls: 'bottom-0 left-[30%] w-[56%] z-30',
+    rot: '-1.5deg',
+    depth: 30,
+    delay: '0.65s',
+  },
+] as const;
+
+export const HeroSection: React.FC<HeroSectionProps> = ({ release, platforms, detected, onSelectPlatform }) => {
+  const order: PlatformId[] = detected === 'macos' ? ['macos', 'windows'] : ['windows', 'macos'];
+  const fileFor = (id: PlatformId) => platforms.find((p) => p.platform === id)?.files.find((f) => f.recommended);
+  const stageRef = React.useRef<HTMLDivElement>(null);
+
+  const onMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType !== 'mouse') return;
+    const r = e.currentTarget.getBoundingClientRect();
+    e.currentTarget.style.setProperty('--mx', String(((e.clientX - r.left) / r.width - 0.5) * 2));
+    e.currentTarget.style.setProperty('--my', String(((e.clientY - r.top) / r.height - 0.5) * 2));
+  };
+  const onLeave = () => {
+    stageRef.current?.style.setProperty('--mx', '0');
+    stageRef.current?.style.setProperty('--my', '0');
+  };
+
+  return (
+    <section id="hero" className="relative isolate pt-28 sm:pt-32 pb-20 lg:pb-28">
+      <div className="mx-auto grid max-w-7xl items-center gap-12 px-5 sm:px-8 lg:grid-cols-[1.05fr_1fr] lg:gap-8">
+        <div>
+          <p className="enter eyebrow inline-flex items-center gap-2 rounded-full border border-paper/20 px-3.5 py-1.5 text-paper/80" style={{ '--d': '0s' } as React.CSSProperties}>
+            <span className="size-2 rounded-full bg-heart" aria-hidden="true" />
+            {release.version
+              ? `${release.version}${release.publishedAt ? ` · ${formatDate(release.publishedAt)}` : ''}`
+              : 'Miễn phí · mã nguồn mở'}
+          </p>
+
+          <h1 className="t-hero mt-6 text-paper">
+            <span className="enter block" style={{ '--d': '0.1s' } as React.CSSProperties}>Locket,</span>
+            <span className="enter block" style={{ '--d': '0.2s' } as React.CSSProperties}>nhưng trên</span>
+            <span className="enter block" style={{ '--d': '0.3s' } as React.CSSProperties}>
+              <span className="mark">
+                <span className="relative z-10 text-butter">máy tính.</span>
+              </span>
             </span>
           </h1>
 
-          {/* Subtitle */}
-          <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            Xem trọn vẹn feed bạn bè theo thời gian thực, nhắn tin cực nhanh qua SSE và đăng moment sống động với Studio iPhone 14 Pro Max độc quyền trên <span className="font-semibold text-foreground">Windows</span> & <span className="font-semibold text-foreground">macOS</span>.
+          <p className="enter t-lead mt-7 max-w-xl text-paper/75" style={{ '--d': '0.45s' } as React.CSSProperties}>
+            Xem moment của bạn bè, nhắn tin và đăng ảnh ngay từ Windows hoặc macOS. Không cần mở điện thoại.
           </p>
 
-          {/* 2 Main Download Buttons (Windows & macOS) */}
-          <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
-            {/* macOS Button */}
-            <a
-              href="https://github.com/doi2523/Locket-Desktop/releases/latest/download/LocketDio-macOS.dmg"
-              onClick={() => onSelectPlatform('macos')}
-              className="w-full sm:w-auto"
-            >
-              <Button
-                variant="glow"
-                size="xl"
-                className="w-full sm:w-auto gap-3 text-base shadow-xl group cursor-pointer"
-              >
-                <Apple className="w-6 h-6 fill-current transition-transform group-hover:scale-110" />
-                <div className="text-left">
-                  <div className="text-[11px] uppercase tracking-wider text-white/80 font-medium">
-                    Tải về cho
-                  </div>
-                  <div className="text-base font-bold leading-none">macOS (.dmg)</div>
-                </div>
-                <Download className="w-5 h-5 ml-1 transition-transform group-hover:translate-y-0.5" />
-              </Button>
-            </a>
-
-            {/* Windows Button */}
-            <a
-              href="https://github.com/doi2523/Locket-Desktop/releases/latest/download/LocketDio-Windows-Setup.exe"
-              onClick={() => onSelectPlatform('windows')}
-              className="w-full sm:w-auto"
-            >
-              <Button
-                variant="secondary"
-                size="xl"
-                className="w-full sm:w-auto gap-3 text-base shadow-lg border-0 bg-card/60 hover:bg-card/90 backdrop-blur-xl group cursor-pointer"
-              >
-                <Monitor className="w-6 h-6 text-sky-500 transition-transform group-hover:scale-110" />
-                <div className="text-left">
-                  <div className="text-[11px] uppercase tracking-wider text-muted-foreground font-medium">
-                    Tải về cho
-                  </div>
-                  <div className="text-base font-bold text-foreground leading-none">
-                    Windows (.exe)
-                  </div>
-                </div>
-                <Download className="w-5 h-5 ml-1 text-muted-foreground group-hover:text-foreground transition-transform group-hover:translate-y-0.5" />
-              </Button>
-            </a>
+          <div className="enter mt-9 flex flex-col gap-4 sm:flex-row sm:items-center" style={{ '--d': '0.6s' } as React.CSSProperties}>
+            {order.map((id, i) => {
+              const { Icon, label, ext } = PLATFORM[id];
+              const primary = i === 0;
+              return (
+                <Button
+                  key={id}
+                  asChild
+                  variant={primary ? 'glow' : 'outline'}
+                  size="xl"
+                  className={`group justify-start gap-3 sm:justify-center ${primary ? '' : 'border-paper/30 bg-transparent text-paper hover:bg-paper/10'}`}
+                >
+                  <a href={fileFor(id)?.downloadUrl} onClick={() => onSelectPlatform(id)}>
+                    <Icon className="size-6 shrink-0" />
+                    <span className="text-left leading-tight">
+                      <span className="block text-[11px] font-medium uppercase tracking-wider opacity-70">
+                        {primary && detected ? 'Dành cho máy của bạn' : 'Tải về cho'}
+                      </span>
+                      <span className="block text-lg">
+                        {label} <span className="font-mono text-sm opacity-60">{ext}</span>
+                      </span>
+                    </span>
+                    <Download className="ml-auto size-5 shrink-0 transition-transform group-hover:translate-y-0.5 sm:ml-1" aria-hidden="true" />
+                  </a>
+                </Button>
+              );
+            })}
           </div>
 
-          {/* Value props pills */}
-          <div className="pt-2 flex flex-wrap items-center justify-center gap-y-2 gap-x-6 text-xs sm:text-sm text-muted-foreground">
-            <span className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-              <span>Hơn {stats.totalDownloads.toLocaleString()} lượt tải</span>
-            </span>
-            <span className="flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4 text-sky-500" />
-              <span>Không chứa quảng cáo</span>
-            </span>
-            <span className="flex items-center gap-1.5">
-              <Sparkles className="w-4 h-4 text-amber-500" />
-              <span>Tự cập nhật OTA 1 chạm</span>
-            </span>
-          </div>
-
-          {/* Secondary CTA to full downloads */}
-          <div className="pt-1">
-            <a
-              href="#download"
-              className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-amber-500 font-medium transition-colors"
-            >
-              <span>Xem chi tiết file nén Portable, mã Checksum SHA-256 & hướng dẫn</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+          <p className="enter mt-6 max-w-xl text-sm text-paper/60" style={{ '--d': '0.75s' } as React.CSSProperties}>
+            {detected
+              ? 'Tải trực tiếp từ GitHub Releases. '
+              : 'Locket Dio chỉ chạy trên máy tính: hãy mở trang này bằng Windows hoặc macOS. '}
+            <a href="#download" className="inline-flex items-center gap-1 font-medium text-paper underline decoration-heart decoration-2 underline-offset-4 hover:text-butter">
+              Bản portable và hướng dẫn cài đặt
+              <ArrowDown className="size-3.5" aria-hidden="true" />
             </a>
-          </div>
+          </p>
         </div>
 
-        {/* Hero App Mockup / Screenshot Showcase */}
-        <div className="mt-14 relative max-w-5xl mx-auto">
-          {/* Ambient Glow behind the mockup */}
-          <div className="absolute -inset-1.5 bg-gradient-to-r from-amber-500/20 via-sky-500/20 to-purple-500/20 rounded-3xl blur-2xl opacity-75" />
-
-          {/* Window Frame - Borderless Modern Floating Glass */}
-          <div className="relative rounded-3xl border-0 bg-card/40 shadow-2xl backdrop-blur-2xl overflow-hidden">
-            {/* Window titlebar */}
-            <div className="flex items-center justify-between px-5 py-3.5 bg-white/[0.04] select-none">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-rose-500/80" />
-                <div className="w-3 h-3 rounded-full bg-amber-500/80" />
-                <div className="w-3 h-3 rounded-full bg-emerald-500/80" />
-              </div>
-              <div className="text-xs font-semibold text-muted-foreground tracking-wide flex items-center gap-2">
-                <img src="/app-icon.png" alt="Icon" className="w-4 h-4 rounded" />
-                <span>Locket Dio Desktop — Giao diện 3 cột trực quan</span>
-              </div>
-              <div className="text-xs text-muted-foreground font-mono">
-                {stats.latestVersion}
+        {/* Cụm polaroid: ảnh chụp màn hình thật của ứng dụng */}
+        <div
+          ref={stageRef}
+          onPointerMove={onMove}
+          onPointerLeave={onLeave}
+          className="relative mx-auto aspect-[5/4.4] w-full max-w-[34rem] lg:max-w-none"
+        >
+          {PRINTS.map((p) => (
+            <div
+              key={p.src}
+              className={`polaroid-float absolute ${p.cls}`}
+              style={{ '--rot': p.rot, '--depth': p.depth } as React.CSSProperties}
+            >
+              <div className="enter-develop" style={{ '--d': p.delay } as React.CSSProperties}>
+                <figure className="polaroid m-0">
+                  <img
+                    src={p.src}
+                    alt={p.alt}
+                    width={1280}
+                    height={960}
+                    className="shot"
+                    fetchPriority={p.src.includes('02_') ? 'high' : undefined}
+                  />
+                  <figcaption>{p.caption}</figcaption>
+                </figure>
               </div>
             </div>
-
-            {/* Window Image content */}
-            <div className="relative aspect-[16/9] w-full overflow-hidden bg-background/20">
-              <img
-                src="/screenshots/02_chat_feed.png"
-                alt="Locket Dio Desktop Giao diện chính"
-                className="w-full h-full object-cover object-top hover:scale-[1.01] transition-transform duration-500"
-              />
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>
