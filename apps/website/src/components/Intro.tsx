@@ -15,7 +15,7 @@ export const Intro: React.FC<{ onDone: () => void }> = ({ onDone }) => (
   >
     <div className="flex flex-col items-center gap-4" style={{ animation: 'splash-logo 0.9s cubic-bezier(0.2,0.8,0.2,1) both' }}>
       <div className="rounded-[1.6rem] bg-paper p-2 pb-6 shadow-[0_18px_40px_-10px_rgb(0_0_0/0.6)] -rotate-3">
-        <img src="/app-icon.png" alt="" className="size-24 rounded-xl" />
+        <img src="/app-icon.png" alt="" className="size-24" />
       </div>
       <span className="font-display text-2xl font-extrabold tracking-tight text-paper">Locket Dio</span>
     </div>

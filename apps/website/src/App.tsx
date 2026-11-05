@@ -6,7 +6,6 @@ import { HeroSection } from '@/components/sections/HeroSection';
 import { FeaturesSection } from '@/components/sections/FeaturesSection';
 import { DownloadSection } from '@/components/sections/DownloadSection';
 import { SupportSection } from '@/components/sections/SupportSection';
-import { DonateModal } from '@/components/modals/DonateModal';
 import { FALLBACK_DATA, getDownloadData } from '@/services/downloadService';
 import { detectPlatform } from '@/lib/platform';
 import { Intro } from '@/components/Intro';
@@ -21,7 +20,6 @@ export default function App() {
   useMotion();
   const [data, setData] = useState<DownloadData>(FALLBACK_DATA);
   const [loading, setLoading] = useState(true);
-  const [donateModalOpen, setDonateModalOpen] = useState(false);
   const [detected] = useState<PlatformId | null>(detectPlatform);
   const [selectedPlatform, setSelectedPlatform] = useState<PlatformId>(detected ?? 'windows');
 
@@ -60,7 +58,7 @@ export default function App() {
         />
       </div>
 
-      <Navbar onOpenDonate={() => setDonateModalOpen(true)} />
+      <Navbar />
 
       <main id="main" className="relative z-10 flex-1">
         <HeroSection
@@ -77,12 +75,11 @@ export default function App() {
           detected={detected}
         />
         <FeaturesSection />
-        <SupportSection onOpenDonateModal={() => setDonateModalOpen(true)} />
+        <SupportSection />
       </main>
 
       {!introDone && <Intro onDone={() => setIntroDone(true)} />}
-      <Footer onOpenDonate={() => setDonateModalOpen(true)} />
-      <DonateModal open={donateModalOpen} onOpenChange={setDonateModalOpen} />
+      <Footer />
     </div>
   );
 }

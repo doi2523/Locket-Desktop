@@ -3,16 +3,14 @@ import { Download, Heart, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { GithubIcon } from '@/components/icons/GithubIcon';
 
-interface NavbarProps {
-  onOpenDonate?: () => void;
-}
-
 const LINKS = [
   { href: '#download', label: 'Tải về' },
   { href: '#features', label: 'Tính năng' },
 ] as const;
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenDonate }) => {
+const DONATE_HREF = '#support';
+
+export const Navbar: React.FC = () => {
   const [open, setOpen] = React.useState(false);
   const [scrolled, setScrolled] = React.useState(false);
 
@@ -40,12 +38,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenDonate }) => {
       }`}
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 sm:px-8">
-        <a href="#hero" className="group flex items-center gap-3 rounded-xl" aria-label="Locket Dio Desktop, về đầu trang">
-          <img
-            src="/app-icon.png"
-            alt=""
-            className="size-9 rounded-xl transition-transform duration-300 group-hover:-rotate-6"
-          />
+        <a href="#hero" className="flex items-center gap-3" aria-label="Locket Dio Desktop, về đầu trang">
+          <img src="/app-icon.png" alt="" className="size-9" />
           <span className="font-display text-lg font-extrabold tracking-tight text-paper">
             Locket Dio <span className="font-medium text-paper/60">Desktop</span>
           </span>
@@ -57,10 +51,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenDonate }) => {
               {l.label}
             </a>
           ))}
-          <button type="button" onClick={onOpenDonate} className={`${linkCls} inline-flex cursor-pointer items-center gap-1.5`}>
+          <a href={DONATE_HREF} className={`${linkCls} inline-flex items-center gap-1.5`}>
             <Heart className="size-3.5 fill-heart text-heart" aria-hidden="true" />
             Ủng hộ
-          </button>
+          </a>
         </nav>
 
         <div className="flex items-center gap-2">
@@ -107,16 +101,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenDonate }) => {
               </li>
             ))}
             <li>
-              <button
-                type="button"
-                onClick={() => {
-                  setOpen(false);
-                  onOpenDonate?.();
-                }}
-                className="flex w-full cursor-pointer items-center gap-2 rounded-xl px-3 py-3.5 text-left font-display text-2xl font-bold text-paper hover:bg-paper/10"
+              <a
+                href={DONATE_HREF}
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-2 rounded-xl px-3 py-3.5 font-display text-2xl font-bold text-paper hover:bg-paper/10"
               >
                 Ủng hộ <Heart className="size-5 fill-heart text-heart" aria-hidden="true" />
-              </button>
+              </a>
             </li>
             <li className="mt-2 border-t border-paper/10 pt-4">
               <a

@@ -1,19 +1,15 @@
 import * as React from 'react';
 import { GithubIcon } from '@/components/icons/GithubIcon';
 
-interface FooterProps {
-  onOpenDonate?: () => void;
-}
-
 const link = 'rounded text-paper/70 transition-colors hover:text-butter';
 const REPO = 'https://github.com/doi2523/Locket-Desktop';
 
-export const Footer: React.FC<FooterProps> = ({ onOpenDonate }) => (
+export const Footer: React.FC = () => (
   <footer className="relative z-10 overflow-hidden pt-16">
     <div className="mx-auto grid max-w-7xl gap-10 px-5 sm:px-8 md:grid-cols-[1.4fr_1fr_1fr]">
       <div className="space-y-4">
         <div className="flex items-center gap-3">
-          <img src="/app-icon.png" alt="" className="size-10 rounded-xl" />
+          <img src="/app-icon.png" alt="" className="size-10" />
           <span className="font-display text-xl font-extrabold text-paper">Locket Dio Desktop</span>
         </div>
         <p className="max-w-sm text-sm leading-relaxed text-paper/65">
@@ -27,9 +23,9 @@ export const Footer: React.FC<FooterProps> = ({ onOpenDonate }) => (
           <li><a href="#download" className={link}>Tải về</a></li>
           <li><a href="#features" className={link}>Tính năng</a></li>
           <li>
-            <button type="button" onClick={onOpenDonate} className={`${link} cursor-pointer`}>
+            <a href="#support" className={link}>
               Ủng hộ
-            </button>
+            </a>
           </li>
         </ul>
       </nav>
