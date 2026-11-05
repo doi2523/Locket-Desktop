@@ -29,7 +29,7 @@ function CopyAccount() {
 }
 
 export const SupportSection: React.FC = () => (
-  <section id="support" aria-labelledby="support-title" className="relative z-10 scroll-mt-16 py-20 sm:py-28">
+  <section id="support" aria-labelledby="support-title" className="relative z-10 scroll-mt-16 pb-14 pt-10 sm:pb-16 sm:pt-14">
     <div className="mx-auto max-w-7xl px-5 sm:px-8">
       <div className="reveal max-w-3xl">
         <p className="eyebrow text-heart">Ủng hộ</p>
@@ -41,7 +41,7 @@ export const SupportSection: React.FC = () => (
         </p>
       </div>
 
-      <div className="mt-12 grid gap-5 lg:grid-cols-[1.5fr_1fr]">
+      <div className="mt-8 grid gap-5 sm:mt-10 lg:grid-cols-[1.5fr_1fr]">
         <div className="reveal grid gap-6 rounded-3xl border border-paper/10 bg-ink-2 p-6 sm:grid-cols-[auto_1fr] sm:items-center sm:gap-8 sm:p-8">
           <div className="mx-auto w-full max-w-[16rem] rounded-2xl bg-white p-3 sm:mx-0">
             <img

@@ -5,7 +5,7 @@ const link = 'rounded text-paper/70 transition-colors hover:text-butter';
 const REPO = 'https://github.com/doi2523/Locket-Desktop';
 
 export const Footer: React.FC = () => (
-  <footer className="relative z-10 overflow-hidden pt-16">
+  <footer className="relative z-10 overflow-hidden pt-8">
     <div className="mx-auto grid max-w-7xl gap-10 px-5 sm:px-8 md:grid-cols-[1.4fr_1fr_1fr]">
       <div className="space-y-4">
         <div className="flex items-center gap-3">
@@ -44,7 +44,7 @@ export const Footer: React.FC = () => (
       </nav>
     </div>
 
-    <p className="mx-auto mt-12 max-w-7xl px-5 text-xs text-paper/50 sm:px-8">
+    <p className="mx-auto mt-8 max-w-7xl px-5 text-xs text-paper/50 sm:px-8">
       © 2026 Locket Dio Project, tác giả doi2523. Apple, macOS và Windows là thương hiệu của chủ sở hữu tương ứng, chỉ dùng để chỉ nền tảng tương thích.
     </p>
 

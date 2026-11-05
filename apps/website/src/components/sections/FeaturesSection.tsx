@@ -69,7 +69,7 @@ const FEATURES: Feature[] = [
 ];
 
 export const FeaturesSection: React.FC = () => (
-  <section id="features" aria-labelledby="features-title" className="relative z-10 scroll-mt-16 py-20 sm:py-28">
+  <section id="features" aria-labelledby="features-title" className="relative z-10 scroll-mt-16 pb-8 pt-14 sm:pb-10 sm:pt-20">
     <div className="mx-auto max-w-7xl px-5 sm:px-8">
       <div className="reveal max-w-3xl">
         <p className="eyebrow text-heart">Tính năng</p>
@@ -78,7 +78,7 @@ export const FeaturesSection: React.FC = () => (
         </h2>
       </div>
 
-      <ul className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-6">
+      <ul className="mt-8 grid sm:mt-10 grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-6">
         {FEATURES.map((f, i) => {
           const Icon = f.icon;
           return (

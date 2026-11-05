@@ -194,7 +194,7 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ data, loading,
 
   return (
     <section id="download" aria-labelledby="download-title" className="relative z-10 mx-2 scroll-mt-16 rounded-[2rem] bg-paper text-ink sm:mx-4 sm:rounded-[3rem]">
-      <div className="mx-auto max-w-5xl space-y-8 px-5 py-16 sm:px-8 sm:py-24">
+      <div className="mx-auto max-w-5xl space-y-6 px-5 py-12 sm:space-y-8 sm:px-8 sm:py-16">
         <div className="reveal max-w-2xl">
           <p className="eyebrow text-ink/60">Tải về</p>
           <h2 id="download-title" className="t-h2 mt-3">

@@ -64,7 +64,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ release, platforms, de
   };
 
   return (
-    <section id="hero" className="relative isolate pt-28 sm:pt-32 pb-20 lg:pb-28">
+    <section id="hero" className="relative isolate pt-28 sm:pt-32 pb-10 lg:pb-14">
       <div className="mx-auto grid max-w-7xl items-center gap-12 px-5 sm:px-8 lg:grid-cols-[1.05fr_1fr] lg:gap-8">
         <div>
           <p className="enter eyebrow inline-flex items-center gap-2 rounded-full border border-paper/20 px-3.5 py-1.5 text-paper/80" style={{ '--d': '0s' } as React.CSSProperties}>
