@@ -1,32 +1,9 @@
 import * as React from 'react';
-import { Check, Copy, Star } from 'lucide-react';
+import { Star } from 'lucide-react';
 import { GithubIcon } from '@/components/icons/GithubIcon';
 import { Button } from '@/components/ui/button';
 
-const ACCOUNT = '0369882523';
-const VIETQR_URL =
-  'https://img.vietqr.io/image/MB-0369882523-compact2.png?amount=0&addInfo=Ung%20ho%20Locket%20Dio&accountName=DAO%20VAN%20DOI';
-
-function CopyAccount() {
-  const [state, setState] = React.useState<'idle' | 'copied' | 'failed'>('idle');
-  const copy = async () => {
-    try {
-      await navigator.clipboard.writeText(ACCOUNT);
-      setState('copied');
-      setTimeout(() => setState('idle'), 2000);
-    } catch {
-      setState('failed');
-    }
-  };
-  return (
-    <Button type="button" variant="outline" onClick={copy} className="w-full gap-2 border-paper/30 bg-transparent text-paper hover:bg-paper/10">
-      {state === 'copied' ? <Check className="size-4" aria-hidden="true" /> : <Copy className="size-4" aria-hidden="true" />}
-      <span aria-live="polite">
-        {state === 'copied' ? 'Đã chép số tài khoản' : state === 'failed' ? 'Không chép được, hãy chép thủ công' : 'Chép số tài khoản'}
-      </span>
-    </Button>
-  );
-}
+const DONATE_IMAGE_URL = '/images/donate_momo.png';
 
 export const SupportSection: React.FC = () => (
   <section id="support" aria-labelledby="support-title" className="relative z-10 pb-6 pt-14 sm:pb-8 sm:pt-20">
@@ -45,28 +22,27 @@ export const SupportSection: React.FC = () => (
 
       <div className="mt-8 grid gap-5 sm:mt-10 lg:grid-cols-[1.5fr_1fr]">
         <div className="reveal grid gap-6 rounded-3xl border border-paper/10 bg-ink-2 p-6 sm:grid-cols-[auto_1fr] sm:items-center sm:gap-8 sm:p-8">
-          <div className="mx-auto w-full max-w-[16rem] rounded-2xl bg-white p-3 sm:mx-0">
+          <div className="mx-auto w-full max-w-[17rem] overflow-hidden rounded-2xl bg-white p-2.5 sm:mx-0 shadow-md">
             <img
-              src={VIETQR_URL}
-              alt="Mã QR VietQR chuyển khoản tới MB Bank, tài khoản 0369882523, chủ tài khoản Đào Văn Đợi"
-              width={512}
-              height={640}
+              src={DONATE_IMAGE_URL}
+              alt="Mã QR ủng hộ MoMo - Đào Văn Đợi"
+              width={1290}
+              height={1410}
               loading="lazy"
               decoding="async"
-              className="h-auto w-full"
+              className="h-auto w-full rounded-xl object-contain"
             />
           </div>
-          <div className="space-y-5">
+          <div className="space-y-4">
             <div>
-              <h3 className="t-h3 text-paper">Chuyển khoản ngân hàng</h3>
-              <p className="mt-1 text-sm text-paper/65">Quét mã bằng app ngân hàng bất kỳ hỗ trợ VietQR.</p>
+              <h3 className="t-h3 text-paper">Ủng hộ qua MoMo / Chuyển khoản</h3>
+              <p className="mt-2 text-sm leading-relaxed text-paper/70">
+                Quét mã QR trực tiếp bằng ứng dụng MoMo hoặc bất kỳ ứng dụng ngân hàng nào hỗ trợ VietQR để gửi lời nhắn và tiếp sức cho dự án.
+              </p>
             </div>
-            <dl className="rounded-2xl bg-ink-3 p-4 text-sm">
-              <dt className="text-paper/60">MB Bank</dt>
-              <dd className="mt-1 break-all font-mono text-xl font-bold tracking-wider text-paper">{ACCOUNT}</dd>
-              <dd className="mt-1 text-paper/60">ĐÀO VĂN ĐÔI</dd>
-            </dl>
-            <CopyAccount />
+            <p className="text-xs text-paper/50">
+              * Mọi sự đóng góp đều được trân trọng và dùng cho chi phí duy trì máy chủ &amp; phát triển tính năng mới.
+            </p>
           </div>
         </div>
 
