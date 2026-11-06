@@ -2,24 +2,96 @@
 <html lang="vi" class="dark scroll-smooth">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/app-icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Locket Dio Desktop — Tải Ứng Dụng Cho Windows & macOS</title>
     <meta
       name="description"
-      content="Locket Dio Desktop - Ứng dụng Locket độc lập cho máy tính Windows & macOS. Xem khoảnh khắc bạn bè theo thời gian thực, nhắn tin và đăng moment chất lượng cao."
+      content="Tải Locket Dio Desktop miễn phí cho Windows và macOS. Xem khoảnh khắc (moment) bạn bè theo thời gian thực, nhắn tin tức thì và đăng ảnh, video chất lượng cao từ máy tính."
     />
+    <meta
+      name="keywords"
+      content="Locket, Locket Desktop, Locket PC, Locket Mac, Locket Windows, Locket Dio, Locket máy tính, tải Locket cho máy tính, download Locket desktop, ứng dụng Locket PC"
+    />
+    <meta name="author" content="Đào Văn Đợi (Dio)" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+
+    <!-- Canonical & Sitemap -->
+    <link rel="canonical" href="https://app.locket-dio.com/" />
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/app-icon.png" />
+    <link rel="apple-touch-icon" href="/app-icon.png" />
     <meta name="theme-color" content="#130f1f" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:locale" content="vi_VN" />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Locket Dio Desktop — Locket cho Windows & macOS" />
-    <meta property="og:description" content="Xem moment bạn bè, nhắn tin và đăng ảnh Locket ngay trên máy tính." />
-    <meta property="og:image" content="/screenshots/02_chat_feed.png" />
+    <meta property="og:site_name" content="Locket Dio Desktop" />
+    <meta property="og:url" content="https://app.locket-dio.com/" />
+    <meta property="og:title" content="Locket Dio Desktop — Locket Cho Máy Tính Windows & macOS" />
+    <meta
+      property="og:description"
+      content="Tải Locket Dio Desktop miễn phí. Xem moment bạn bè thời gian thực, nhắn tin, đăng ảnh và video trực tiếp từ máy tính mà không cần điện thoại."
+    />
+    <meta property="og:image" content="https://app.locket-dio.com/screenshots/03_locket_feed.png" />
+    <meta property="og:image:secure_url" content="https://app.locket-dio.com/screenshots/03_locket_feed.png" />
+    <meta property="og:image:width" content="1121" />
+    <meta property="og:image:height" content="849" />
+    <meta property="og:image:alt" content="Giao diện Locket Dio Desktop trên máy tính" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://app.locket-dio.com/" />
+    <meta name="twitter:title" content="Locket Dio Desktop — Locket Cho Máy Tính Windows & macOS" />
+    <meta
+      name="twitter:description"
+      content="Tải Locket Dio Desktop miễn phí. Xem moment bạn bè thời gian thực, nhắn tin, đăng ảnh và video trực tiếp từ máy tính."
+    />
+    <meta name="twitter:image" content="https://app.locket-dio.com/screenshots/03_locket_feed.png" />
+
+    <!-- Fonts preconnect -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,600..800&display=swap"
     />
-    <title>Locket Dio Desktop — Tải Ứng Dụng Cho Windows & macOS</title>
+
+    <!-- Structured Data (JSON-LD) for Google Rich Snippets -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "SoftwareApplication",
+            "name": "Locket Dio Desktop",
+            "operatingSystem": "Windows 10, Windows 11, macOS",
+            "applicationCategory": "SocialNetworkingApplication",
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "USD"
+            },
+            "description": "Ứng dụng Locket độc lập cho máy tính Windows và macOS. Xem khoảnh khắc bạn bè theo thời gian thực, nhắn tin và đăng ảnh, video chất lượng cao.",
+            "image": "https://app.locket-dio.com/app-icon.png",
+            "screenshot": "https://app.locket-dio.com/screenshots/03_locket_feed.png",
+            "author": {
+              "@type": "Person",
+              "name": "Đào Văn Đợi",
+              "url": "https://github.com/doi2523"
+            },
+            "url": "https://app.locket-dio.com/"
+          },
+          {
+            "@type": "WebSite",
+            "name": "Locket Dio Desktop",
+            "url": "https://app.locket-dio.com/"
+          }
+        ]
+      }
+    </script>
   </head>
   <body class="bg-background text-foreground antialiased min-h-screen">
     <div id="root"></div>

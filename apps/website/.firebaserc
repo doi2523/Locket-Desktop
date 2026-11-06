@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "locket-dio-4ca9c"
+  },
+  "targets": {
+    "locket-dio-4ca9c": {
+      "hosting": {
+        "app-locketdio": [
+          "app-locketdio"
+        ]
+      }
+    }
+  }
+}
