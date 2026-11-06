@@ -12,6 +12,7 @@ const LINKS: ReadonlyArray<{ href: string; label: string; heart?: boolean }> = [
   { href: '#support', label: 'Ủng hộ', heart: true },
   { href: '#features', label: 'Tính năng' },
   { href: '#community', label: 'Cộng đồng' },
+  { href: '#explore', label: 'Khám phá' },
 ];
 
 export const Navbar: React.FC = () => {

@@ -1,58 +1,57 @@
 import * as React from 'react';
-import { ArrowUpRight, Globe, Sparkles } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 
-interface EcosystemItem {
+interface ExploreItem {
   title: string;
   domain: string;
   href: string;
   desc: string;
   tag: string;
-  icon: typeof Globe;
+  image: string;
   chip: string;
   badge: string;
 }
 
-const ITEMS: EcosystemItem[] = [
+const ITEMS: ExploreItem[] = [
   {
     title: 'Locket Dio Web',
     domain: 'locket-dio.com',
     href: 'https://locket-dio.com',
-    desc: 'Trải nghiệm Locket ngay trên trình duyệt web mà không cần cài đặt. Xem moment bạn bè, nhắn tin và đăng ảnh mọi lúc mọi nơi từ bất kỳ thiết bị nào.',
+    desc: 'Dùng Locket nhanh ngay trên trình duyệt mà không cần cài đặt. Xem moment, nhắn tin và chia sẻ khoảnh khắc với bạn bè ở bất cứ đâu.',
     tag: 'Bản Web trực tuyến',
-    icon: Globe,
-    chip: 'bg-sky',
+    image: 'https://locket-dio.com/apple-touch-icon.png',
+    chip: 'bg-paper/10 border border-paper/15',
     badge: 'Trực tuyến',
   },
   {
     title: 'WazeMod Community',
     domain: 'wazemod.io.vn',
     href: 'https://wazemod.io.vn',
-    desc: 'Cổng thông tin chia sẻ các bản mod, ứng dụng tùy biến độc đáo và tiện ích công nghệ chất lượng cao được tối ưu hóa cho cộng đồng.',
+    desc: 'Cổng chia sẻ các ứng dụng tùy biến, tiện ích công nghệ và các bản mod hữu ích được phát triển dành riêng cho cộng đồng.',
     tag: 'Kho ứng dụng & Tiện ích',
-    icon: Sparkles,
-    chip: 'bg-butter',
+    image: 'https://media.chisadin.id.vn/cdn/waze.png',
+    chip: 'bg-paper/10 border border-paper/15',
     badge: 'Tiện ích & Mod',
   },
 ];
 
-export const EcosystemSection: React.FC = () => (
-  <section id="ecosystem" aria-labelledby="ecosystem-title" className="relative z-10 pb-16 pt-10 sm:pb-20 sm:pt-14">
+export const ExploreSection: React.FC = () => (
+  <section id="explore" aria-labelledby="explore-title" className="relative z-10 pb-16 pt-10 sm:pb-20 sm:pt-14">
     <div className="mx-auto max-w-7xl px-5 sm:px-8">
       <div className="reveal max-w-3xl">
-        <h2 id="ecosystem-title" className="t-h2 text-heart">
-          Hệ sinh thái
+        <h2 id="explore-title" className="t-h2 text-heart">
+          Khám phá
         </h2>
         <p className="t-sub mt-3 text-paper">
-          Khám phá thêm các nền tảng <span className="text-butter">trong cùng hệ sinh thái.</span>
+          Không chỉ có trên máy tính, <span className="text-butter">vẫn còn nhiều điều thú vị.</span>
         </p>
         <p className="t-lead mt-4 text-paper/75">
-          Bên cạnh phiên bản máy tính, hãy ghé thăm phiên bản web của Locket Dio và các dự án tiện ích công nghệ khác cùng phát triển.
+          Dùng Locket trực tiếp trên trình duyệt web tại locket-dio.com, hoặc ghé wazemod.io.vn để khám phá thêm các ứng dụng và tiện ích hay ho khác.
         </p>
       </div>
 
       <div className="mt-8 grid gap-6 sm:mt-10 md:grid-cols-2">
         {ITEMS.map((item, i) => {
-          const Icon = item.icon;
           return (
             <a
               key={item.domain}
@@ -64,8 +63,15 @@ export const EcosystemSection: React.FC = () => (
             >
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className={`inline-flex size-12 items-center justify-center rounded-2xl text-ink shadow-sm ${item.chip}`}>
-                    <Icon className="size-6" aria-hidden="true" />
+                  <span className={`inline-flex size-12 items-center justify-center overflow-hidden rounded-2xl shadow-sm ${item.chip}`}>
+                    <img
+                      src={item.image}
+                      alt=""
+                      width={32}
+                      height={32}
+                      loading="lazy"
+                      className="size-8 rounded-lg object-contain"
+                    />
                   </span>
                   <span className="rounded-full border border-paper/15 bg-paper/5 px-3 py-1 font-mono text-xs font-semibold text-paper/75">
                     {item.badge}

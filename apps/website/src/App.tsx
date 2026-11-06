@@ -6,7 +6,7 @@ import { HeroSection } from '@/components/sections/HeroSection';
 import { AboutSection } from '@/components/sections/AboutSection';
 import { FeaturesSection } from '@/components/sections/FeaturesSection';
 import { CommunitySection } from '@/components/sections/CommunitySection';
-import { EcosystemSection } from '@/components/sections/EcosystemSection';
+import { ExploreSection } from '@/components/sections/ExploreSection';
 import { DownloadSection } from '@/components/sections/DownloadSection';
 import { SupportSection } from '@/components/sections/SupportSection';
 import { FALLBACK_DATA, getDownloadData } from '@/services/downloadService';
@@ -81,7 +81,7 @@ export default function App() {
         <SupportSection />
         <FeaturesSection />
         <CommunitySection />
-        <EcosystemSection />
+        <ExploreSection />
       </main>
 
       {!introDone && <Intro onDone={() => setIntroDone(true)} />}
