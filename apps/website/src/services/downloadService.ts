@@ -1,4 +1,4 @@
-import type { DownloadData, DownloadFile, PlatformDownload, ReleaseInfo } from '@/types/download';
+import type { DownloadData, DownloadFile, PlatformDownload } from '@/types/download';
 
 const REPO = 'doi2523/Locket-Desktop';
 const RELEASES_URL = `https://github.com/${REPO}/releases`;
@@ -65,7 +65,7 @@ interface GithubAsset {
   digest?: string | null;
 }
 
-interface GithubRelease {
+export interface GithubRelease {
   tag_name: string;
   published_at: string | null;
   body: string | null;
@@ -73,11 +73,38 @@ interface GithubRelease {
   assets: GithubAsset[];
 }
 
+/** Bản phát hành mới nhất lúc build (xem vite.config.ts). null nếu lúc build không gọi được GitHub. */
+const BUILD_RELEASE: GithubRelease | null = typeof __LATEST_RELEASE__ === 'undefined' ? null : __LATEST_RELEASE__;
+
+const RELEASE_KEY = 'locket-gh-release';
+const STARS_KEY = 'locket-gh-stars';
+/** Giữ kết quả 10 phút để không chạm giới hạn 60 request/giờ/IP của API GitHub khi chưa xác thực. */
+const CACHE_TTL_MS = 10 * 60 * 1000;
+
+function readCache<T>(key: string): { value: T; fresh: boolean } | null {
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return null;
+    const { t, v } = JSON.parse(raw) as { t: number; v: T };
+    return { value: v, fresh: Date.now() - t < CACHE_TTL_MS };
+  } catch {
+    return null;
+  }
+}
+
+function writeCache(key: string, value: unknown): void {
+  try {
+    localStorage.setItem(key, JSON.stringify({ t: Date.now(), v: value }));
+  } catch {
+    /* storage bị chặn hoặc đầy: bỏ qua */
+  }
+}
+
 function formatSize(bytes: number): string {
   return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
 }
 
-function buildPlatforms(assets: GithubAsset[]): PlatformDownload[] {
+function buildPlatforms(assets: GithubAsset[], withCounts: boolean): PlatformDownload[] {
   return PLATFORM_TEMPLATES.map((p) => ({
     ...p,
     files: p.files.map((f) => {
@@ -87,21 +114,42 @@ function buildPlatforms(assets: GithubAsset[]): PlatformDownload[] {
         downloadUrl: asset?.browser_download_url ?? `${LATEST_DOWNLOAD}/${f.filename}`,
         size: asset ? formatSize(asset.size) : undefined,
         checksum: asset?.digest ?? undefined,
-        downloadsCount: asset?.download_count,
+        // Lượt tải thay đổi liên tục nên chỉ hiện khi có dữ liệu trực tiếp.
+        downloadsCount: withCounts ? asset?.download_count : undefined,
       };
     }),
   }));
 }
 
-const FALLBACK_RELEASE: ReleaseInfo = {
-  version: 'v1.0.0',
-  publishedAt: '2026-11-06T00:00:00Z',
-  notes: null,
-  url: RELEASES_URL,
-  totalDownloads: null,
-};
+function toDownloadData(r: GithubRelease | null, source: DownloadData['source']): DownloadData {
+  if (!r) {
+    return {
+      source: 'fallback',
+      platforms: buildPlatforms([], false),
+      release: { version: null, publishedAt: null, notes: null, url: RELEASES_URL, totalDownloads: null },
+    };
+  }
+  const live = source === 'live';
+  return {
+    source,
+    platforms: buildPlatforms(r.assets, live),
+    release: {
+      version: r.tag_name,
+      publishedAt: r.published_at,
+      notes: r.body?.trim() || null,
+      url: r.html_url,
+      totalDownloads: live ? r.assets.reduce((sum, a) => sum + a.download_count, 0) : null,
+    },
+  };
+}
+
+/** Dữ liệu hiển thị ngay khi tải trang, trước khi gọi API. Phiên bản lấy từ lúc build, không ghi cứng. */
+export const FALLBACK_DATA: DownloadData = toDownloadData(BUILD_RELEASE, 'fallback');
 
 export async function getDownloadData(signal?: AbortSignal): Promise<DownloadData> {
+  const cached = readCache<GithubRelease>(RELEASE_KEY);
+  if (cached?.fresh) return toDownloadData(cached.value, 'live');
+
   try {
     const res = await fetch(`https://api.github.com/repos/${REPO}/releases/latest`, {
       signal,
@@ -109,55 +157,30 @@ export async function getDownloadData(signal?: AbortSignal): Promise<DownloadDat
     });
     if (!res.ok) throw new Error(`GitHub API ${res.status}`);
     const r = (await res.json()) as GithubRelease;
-    return {
-      source: 'live',
-      platforms: buildPlatforms(r.assets),
-      release: {
-        version: r.tag_name,
-        publishedAt: r.published_at,
-        notes: r.body?.trim() || null,
-        url: r.html_url,
-        totalDownloads: r.assets.reduce((sum, a) => sum + a.download_count, 0),
-      },
-    };
+    writeCache(RELEASE_KEY, r);
+    return toDownloadData(r, 'live');
   } catch (err) {
     if (signal?.aborted) throw err;
-    // Chưa có release hoặc lỗi mạng: vẫn cung cấp liên kết "latest" hợp lệ, không bịa số liệu.
-    return { source: 'fallback', platforms: buildPlatforms([]), release: FALLBACK_RELEASE };
+    // Lỗi mạng hoặc hết giới hạn: ưu tiên bản đã lưu lần trước, sau đó tới bản lúc build.
+    return cached ? toDownloadData(cached.value, 'live') : FALLBACK_DATA;
   }
 }
 
-export const FALLBACK_DATA: DownloadData = {
-  source: 'fallback',
-  platforms: buildPlatforms([]),
-  release: FALLBACK_RELEASE,
-};
-
-const STARS_KEY = 'locket-gh-stars';
-
 /** Số sao của repo. Trả null nếu không lấy được (hết giới hạn API, mất mạng...). */
 export async function getStarCount(signal?: AbortSignal): Promise<number | null> {
-  try {
-    const cached = sessionStorage.getItem(STARS_KEY);
-    if (cached) return Number(cached);
-  } catch {
-    /* storage bị chặn */
-  }
+  const cached = readCache<number>(STARS_KEY);
+  if (cached?.fresh) return cached.value;
   try {
     const res = await fetch(`https://api.github.com/repos/${REPO}`, {
       signal,
       headers: { Accept: 'application/vnd.github+json' },
     });
-    if (!res.ok) return null;
+    if (!res.ok) return cached?.value ?? null;
     const { stargazers_count } = (await res.json()) as { stargazers_count?: number };
-    if (typeof stargazers_count !== 'number') return null;
-    try {
-      sessionStorage.setItem(STARS_KEY, String(stargazers_count));
-    } catch {
-      /* bỏ qua */
-    }
+    if (typeof stargazers_count !== 'number') return cached?.value ?? null;
+    writeCache(STARS_KEY, stargazers_count);
     return stargazers_count;
   } catch {
-    return null;
+    return cached?.value ?? null;
   }
 }

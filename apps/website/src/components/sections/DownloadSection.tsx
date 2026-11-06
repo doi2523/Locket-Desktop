@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Check, Copy, Download, ExternalLink, FileArchive, HardDrive, ListChecks, TriangleAlert } from 'lucide-react';
 import { AppleIcon, WindowsIcon } from '@/components/icons/PlatformIcons';
+import { ReleaseNotes } from '@/components/ReleaseNotes';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { formatDate } from '@/lib/utils';
@@ -193,7 +194,9 @@ function ReleaseSummary({ data, loading }: { data: DownloadData; loading: boolea
       {release.notes && (
         <details className="text-sm text-paper/80">
           <summary className="cursor-pointer font-semibold text-paper hover:text-butter transition-colors">Có gì mới</summary>
-          <pre className="mt-2 max-h-56 overflow-auto whitespace-pre-wrap font-sans leading-relaxed text-paper/70">{release.notes}</pre>
+          <div className="mt-3 max-h-72 overflow-auto pr-1">
+            <ReleaseNotes markdown={release.notes} />
+          </div>
         </details>
       )}
     </div>

@@ -5,26 +5,54 @@ import { Button } from '@/components/ui/button';
 
 const DONATE_IMAGE_URL = '/images/donate_momo.png';
 const DEFAULT_MESSAGE = 'Ung ho locket dio';
+const ACCOUNT_NAME = 'ĐÀO VĂN ĐÔI';
+
+/** Chép vào clipboard, có phương án dự phòng cho trình duyệt chặn Clipboard API. */
+async function copyText(text: string): Promise<boolean> {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      return document.execCommand('copy');
+    } catch {
+      return false;
+    } finally {
+      document.body.removeChild(ta);
+    }
+  }
+}
+
+function CopyButton({ text, label, className = '' }: { text: string; label: string; className?: string }) {
+  const [state, setState] = React.useState<'idle' | 'copied' | 'failed'>('idle');
+  const onClick = async () => {
+    setState((await copyText(text)) ? 'copied' : 'failed');
+    setTimeout(() => setState('idle'), 2000);
+  };
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={`${label}: ${text}`}
+      className={`inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-lg bg-paper/10 px-3 py-1.5 text-xs font-semibold text-paper transition-all hover:bg-paper/20 active:scale-95 ${className}`}
+    >
+      {state === 'copied' ? <Check className="size-3.5 text-butter" aria-hidden="true" /> : <Copy className="size-3.5" aria-hidden="true" />}
+      <span aria-live="polite" className={state === 'copied' ? 'text-butter' : ''}>
+        {state === 'copied' ? 'Đã chép' : state === 'failed' ? 'Không chép được' : 'Sao chép'}
+      </span>
+    </button>
+  );
+}
 
 export const SupportSection: React.FC = () => {
   const [message, setMessage] = React.useState(DEFAULT_MESSAGE);
-  const [copied, setCopied] = React.useState(false);
-
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(message);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      const input = document.getElementById('donate-message') as HTMLInputElement | null;
-      if (input) {
-        input.select();
-        document.execCommand('copy');
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-      }
-    }
-  };
 
   return (
     <section id="support" aria-labelledby="support-title" className="relative z-10 pb-6 pt-14 sm:pb-8 sm:pt-20">
@@ -43,28 +71,31 @@ export const SupportSection: React.FC = () => {
 
         <div className="mt-8 grid gap-5 sm:mt-10 lg:grid-cols-[1.5fr_1fr]">
           <div className="reveal grid gap-6 rounded-3xl border border-paper/10 bg-ink-2 p-6 sm:grid-cols-[auto_1fr] sm:items-center sm:gap-8 sm:p-8">
-            <div className="mx-auto w-full max-w-[17rem] overflow-hidden rounded-2xl bg-white p-2.5 sm:mx-0 shadow-md">
+            {/* Ảnh QR được cắt bỏ dải "Thêm số tiền" của ứng dụng MoMo ở đáy ảnh gốc */}
+            <div className="mx-auto w-full max-w-[17rem] overflow-hidden rounded-2xl bg-white p-2.5 shadow-md sm:mx-0">
               <img
                 src={DONATE_IMAGE_URL}
-                alt="Mã QR ủng hộ MoMo - Đào Văn Đợi"
+                alt={`Mã QR ủng hộ qua MoMo hoặc VietQR, chủ tài khoản ${ACCOUNT_NAME}`}
                 width={1290}
-                height={1410}
+                height={1100}
                 loading="lazy"
                 decoding="async"
-                className="h-auto w-full rounded-xl object-contain"
+                className="aspect-[1290/1100] h-auto w-full rounded-xl object-cover object-top"
               />
             </div>
-            <div className="space-y-4">
+
+            <div className="min-w-0 space-y-4">
               <div>
                 <h3 className="t-h3 text-paper">Ủng hộ qua MoMo / Chuyển khoản</h3>
                 <p className="mt-2 text-sm leading-relaxed text-paper/70">
-                  Quét mã QR trực tiếp bằng ứng dụng MoMo hoặc bất kỳ ứng dụng ngân hàng nào hỗ trợ VietQR để gửi lời nhắn và tiếp sức cho dự án.
+                  Quét mã QR bằng ứng dụng MoMo hoặc bất kỳ ứng dụng ngân hàng nào hỗ trợ VietQR. Không quét được thì chuyển theo số bên dưới.
                 </p>
               </div>
 
+
               <div className="space-y-1.5">
                 <label htmlFor="donate-message" className="block text-xs font-medium text-paper/70">
-                  Nội dung chuyển khoản
+                  Nội dung chuyển khoản (gợi ý)
                 </label>
                 <div className="relative flex items-center">
                   <input
@@ -73,33 +104,15 @@ export const SupportSection: React.FC = () => {
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     onFocus={(e) => e.target.select()}
-                    className="w-full rounded-xl border border-paper/20 bg-ink-3 px-3.5 py-2.5 pr-24 font-mono text-sm text-paper placeholder-paper/40 outline-none transition-colors focus:border-butter focus:ring-1 focus:ring-butter"
-                    placeholder="ung ho locket dio"
+                    aria-describedby="donate-message-hint"
+                    className="w-full rounded-xl border border-paper/20 bg-ink-3 px-3.5 py-2.5 pr-28 font-mono text-sm text-paper outline-none transition-colors focus:border-butter focus:ring-1 focus:ring-butter"
                   />
-                  <button
-                    type="button"
-                    onClick={handleCopy}
-                    className="absolute right-1.5 top-1/2 -translate-y-1/2 inline-flex items-center gap-1.5 rounded-lg bg-paper/10 px-3 py-1.5 text-xs font-semibold text-paper transition-all hover:bg-paper/20 active:scale-95"
-                    aria-label={copied ? 'Đã sao chép nội dung' : 'Sao chép nội dung'}
-                  >
-                    {copied ? (
-                      <>
-                        <Check className="size-3.5 text-butter" aria-hidden="true" />
-                        <span className="font-semibold text-butter">Đã chép</span>
-                      </>
-                    ) : (
-                      <>
-                        <Copy className="size-3.5" aria-hidden="true" />
-                        <span>Sao chép</span>
-                      </>
-                    )}
-                  </button>
+                  <CopyButton text={message} label="Sao chép nội dung chuyển khoản" className="absolute right-1.5 top-1/2 -translate-y-1/2" />
                 </div>
+                <p id="donate-message-hint" className="text-xs text-paper/50">
+                  Dán nội dung này vào ô lời nhắn khi chuyển. Mã QR không tự điền sẵn nội dung.
+                </p>
               </div>
-
-              <p className="text-xs text-paper/50">
-                * Mọi sự đóng góp đều được trân trọng và dùng cho chi phí duy trì máy chủ &amp; phát triển tính năng mới.
-              </p>
             </div>
           </div>
 

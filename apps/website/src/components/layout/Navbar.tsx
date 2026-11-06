@@ -7,7 +7,7 @@ import { getStarCount } from '@/services/downloadService';
 /** Thứ tự link trùng với thứ tự các mục trên trang. */
 const LINKS: ReadonlyArray<{ href: string; label: string; heart?: boolean }> = [
   { href: '#hero', label: 'Trang chủ' },
-  { href: '#about', label: 'Giới thiệu' },
+  { href: '#story', label: 'Câu chuyện' },
   { href: '#download', label: 'Tải xuống' },
   { href: '#support', label: 'Ủng hộ', heart: true },
   { href: '#features', label: 'Tính năng' },
@@ -72,7 +72,7 @@ export const Navbar: React.FC = () => {
           </span>
         </a>
 
-        <nav aria-label="Điều hướng chính" className="hidden items-center gap-0.5 lg:flex">
+        <nav aria-label="Điều hướng chính" className="hidden items-center gap-0.5 xl:flex">
           {LINKS.map((l) => (
             <a key={l.href} href={l.href} className={`${linkCls} inline-flex items-center gap-1.5`}>
               {l.heart && <Heart className="size-3.5 fill-heart text-heart" aria-hidden="true" />}
@@ -109,7 +109,7 @@ export const Navbar: React.FC = () => {
             aria-expanded={open}
             aria-controls="mobile-nav"
             aria-label={open ? 'Đóng menu' : 'Mở menu'}
-            className="inline-flex size-10 cursor-pointer items-center justify-center rounded-full text-paper hover:bg-paper/10 lg:hidden"
+            className="inline-flex size-10 cursor-pointer items-center justify-center rounded-full text-paper hover:bg-paper/10 xl:hidden"
           >
             {open ? <X className="size-6" /> : <Menu className="size-6" />}
           </button>
@@ -117,7 +117,7 @@ export const Navbar: React.FC = () => {
       </div>
 
       <div
-        className={`grid transition-[grid-template-rows,opacity,visibility] duration-300 ease-in-out lg:hidden ${
+        className={`grid transition-[grid-template-rows,opacity,visibility] duration-300 ease-in-out xl:hidden ${
           open ? 'grid-rows-[1fr] opacity-100 visible' : 'grid-rows-[0fr] opacity-0 invisible pointer-events-none'
         }`}
       >

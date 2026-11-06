@@ -19,7 +19,7 @@ const PLATFORM = {
 
 const PRINTS = [
   {
-    src: '/screenshots/02_chat_feed.png',
+    src: '/screenshots/02_chat_feed.webp',
     alt: 'Màn hình chat của Locket Dio: danh sách hội thoại, tin nhắn và moment được chia sẻ',
     caption: 'Chat · tin nhắn',
     cls: 'left-0 top-[8%] w-[64%] z-20',
@@ -28,7 +28,7 @@ const PRINTS = [
     delay: '0.25s',
   },
   {
-    src: '/screenshots/03_locket_feed.png',
+    src: '/screenshots/03_locket_feed.webp',
     alt: 'Feed Locket trên máy tính với bộ lọc bạn bè',
     caption: 'Feed · moment của bạn bè',
     cls: 'right-0 top-0 w-[54%] z-10',
@@ -37,7 +37,7 @@ const PRINTS = [
     delay: '0.45s',
   },
   {
-    src: '/screenshots/04_post_moment_editor.png',
+    src: '/screenshots/04_post_moment_editor.webp',
     alt: 'Studio đăng moment với khung xem trước điện thoại',
     caption: 'Studio · đăng moment',
     cls: 'bottom-0 left-[30%] w-[56%] z-30',
@@ -75,7 +75,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ release, platforms, de
             <span className="font-semibold">
               {release.version
                 ? `${release.version}${release.publishedAt ? ` · ${formatDate(release.publishedAt)}` : ''}`
-                : 'v1.0.0 · 6/11/2026'}
+                : 'Miễn phí · mã nguồn mở'}
             </span>
           </p>
 

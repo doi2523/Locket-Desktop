@@ -3,7 +3,7 @@ import './App.css';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { HeroSection } from '@/components/sections/HeroSection';
-import { AboutSection } from '@/components/sections/AboutSection';
+import { StorySection } from '@/components/sections/StorySection';
 import { FeaturesSection } from '@/components/sections/FeaturesSection';
 import { CommunitySection } from '@/components/sections/CommunitySection';
 import { ExploreSection } from '@/components/sections/ExploreSection';
@@ -70,7 +70,7 @@ export default function App() {
           detected={detected}
           onSelectPlatform={handleSelectPlatform}
         />
-        <AboutSection />
+        <StorySection />
         <DownloadSection
           data={data}
           loading={loading}
