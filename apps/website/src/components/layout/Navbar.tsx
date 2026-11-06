@@ -26,7 +26,17 @@ export const Navbar: React.FC = () => {
   }, []);
 
   React.useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 16);
+    let ticking = false;
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const isScrolled = window.scrollY > 20;
+          setScrolled((prev) => (prev !== isScrolled ? isScrolled : prev));
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
@@ -43,11 +53,16 @@ export const Navbar: React.FC = () => {
     'rounded-full px-4 py-2 text-sm font-semibold text-paper/80 transition-colors hover:bg-paper/10 hover:text-paper';
 
   return (
-    <header
-      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
-        scrolled || open ? 'bg-ink/85 backdrop-blur-md' : 'bg-transparent'
-      }`}
-    >
+    <header className="fixed inset-x-0 top-0 z-50">
+      {/* Lớp nền hiệu ứng mờ kính chuyển đổi mượt mà khi cuộn */}
+      <div
+        aria-hidden="true"
+        className={`pointer-events-none absolute inset-0 -z-10 border-b transition-all duration-300 ease-out [transform:translateZ(0)] ${
+          scrolled || open
+            ? 'border-paper/10 bg-ink/85 opacity-100 shadow-md shadow-black/20 backdrop-blur-md'
+            : 'border-transparent bg-transparent opacity-0 shadow-none backdrop-blur-none'
+        }`}
+      />
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 sm:px-8">
         <a href="#hero" className="flex items-center gap-3" aria-label="Locket Dio Desktop, về đầu trang">
           <img src="/app-icon.png" alt="" className="size-9" />
@@ -100,34 +115,55 @@ export const Navbar: React.FC = () => {
         </div>
       </div>
 
-      {open && (
-        <nav id="mobile-nav" aria-label="Điều hướng di động" className="border-t border-paper/10 px-5 pb-6 pt-3 lg:hidden">
-          <ul className="flex flex-col">
-            {LINKS.map((l) => (
-              <li key={l.href}>
+      <div
+        className={`grid transition-[grid-template-rows,opacity,visibility] duration-300 ease-in-out lg:hidden ${
+          open ? 'grid-rows-[1fr] opacity-100 visible' : 'grid-rows-[0fr] opacity-0 invisible pointer-events-none'
+        }`}
+      >
+        <div className="min-h-0 overflow-hidden">
+          <nav
+            id="mobile-nav"
+            aria-label="Điều hướng di động"
+            className={`border-t border-paper/10 px-5 pb-6 pt-3 transition-transform duration-300 ease-in-out ${
+              open ? 'translate-y-0' : '-translate-y-4'
+            }`}
+          >
+            <ul className="flex flex-col">
+              {LINKS.map((l) => (
+                <li key={l.href}>
+                  <a
+                    href={l.href}
+                    onClick={() => setOpen(false)}
+                    className="flex items-center gap-2 rounded-xl px-3 py-3 font-display text-2xl font-bold text-paper hover:bg-paper/10"
+                  >
+                    {l.label}
+                    {l.heart && <Heart className="size-5 fill-heart text-heart" aria-hidden="true" />}
+                  </a>
+                </li>
+              ))}
+              <li className="mt-2 border-t border-paper/10 pt-4">
                 <a
-                  href={l.href}
-                  onClick={() => setOpen(false)}
-                  className="flex items-center gap-2 rounded-xl px-3 py-3 font-display text-2xl font-bold text-paper hover:bg-paper/10"
+                  href="https://github.com/doi2523/Locket-Desktop"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={stars === null ? "Mã nguồn trên GitHub" : `Mã nguồn trên GitHub, ${stars} sao`}
+                  className="flex items-center justify-between rounded-xl px-3 py-2.5 text-sm text-paper/70 transition-colors hover:bg-paper/10 hover:text-paper"
                 >
-                  {l.label}
-                  {l.heart && <Heart className="size-5 fill-heart text-heart" aria-hidden="true" />}
+                  <span className="flex items-center gap-2">
+                    <GithubIcon className="size-4" /> doi2523/Locket-Desktop
+                  </span>
+                  {stars !== null && (
+                    <span className="inline-flex items-center gap-1 rounded-full bg-paper/10 px-2.5 py-1 text-xs font-semibold tabular-nums text-paper">
+                      <Star className="size-3.5 fill-butter text-butter" aria-hidden="true" />
+                      {stars.toLocaleString("vi-VN")}
+                    </span>
+                  )}
                 </a>
               </li>
-            ))}
-            <li className="mt-2 border-t border-paper/10 pt-4">
-              <a
-                href="https://github.com/doi2523/Locket-Desktop"
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center gap-2 px-3 text-sm text-paper/70 hover:text-paper"
-              >
-                <GithubIcon className="size-4" /> doi2523/Locket-Desktop
-              </a>
-            </li>
-          </ul>
-        </nav>
-      )}
+            </ul>
+          </nav>
+        </div>
+      </div>
     </header>
   );
 };
