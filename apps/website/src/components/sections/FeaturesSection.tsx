@@ -10,7 +10,7 @@ import {
   X,
   type LucideIcon,
 } from 'lucide-react';
-import { Dialog as RadixDialog } from 'radix-ui';
+import * as RadixDialog from '@radix-ui/react-dialog';
 
 interface Feature {
   icon: LucideIcon;
