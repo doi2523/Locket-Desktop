@@ -4,7 +4,7 @@ import { GithubIcon } from '@/components/icons/GithubIcon';
 import { Button } from '@/components/ui/button';
 
 const DONATE_IMAGE_URL = '/images/donate_momo.png';
-const DEFAULT_MESSAGE = 'Ung ho locket dio';
+const DONATE_MESSAGE = 'ung ho locket dio';
 const ACCOUNT_NAME = 'ĐÀO VĂN ĐÔI';
 
 /** Chép vào clipboard, có phương án dự phòng cho trình duyệt chặn Clipboard API. */
@@ -52,8 +52,6 @@ function CopyButton({ text, label, className = '' }: { text: string; label: stri
 }
 
 export const SupportSection: React.FC = () => {
-  const [message, setMessage] = React.useState(DEFAULT_MESSAGE);
-
   return (
     <section id="support" aria-labelledby="support-title" className="relative z-10 pb-6 pt-14 sm:pb-8 sm:pt-20">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
@@ -94,20 +92,14 @@ export const SupportSection: React.FC = () => {
 
 
               <div className="space-y-1.5">
-                <label htmlFor="donate-message" className="block text-xs font-medium text-paper/70">
+                <span className="block text-xs font-medium text-paper/70">
                   Nội dung chuyển khoản (gợi ý)
-                </label>
-                <div className="relative flex items-center">
-                  <input
-                    id="donate-message"
-                    type="text"
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    onFocus={(e) => e.target.select()}
-                    aria-describedby="donate-message-hint"
-                    className="w-full rounded-xl border border-paper/20 bg-ink-3 px-3.5 py-2.5 pr-28 font-mono text-sm text-paper outline-none transition-colors focus:border-butter focus:ring-1 focus:ring-butter"
-                  />
-                  <CopyButton text={message} label="Sao chép nội dung chuyển khoản" className="absolute right-1.5 top-1/2 -translate-y-1/2" />
+                </span>
+                <div className="flex items-center justify-between gap-3 rounded-xl border border-paper/15 bg-ink-3 px-3.5 py-2.5">
+                  <span className="select-all font-mono text-sm font-semibold text-paper">
+                    {DONATE_MESSAGE}
+                  </span>
+                  <CopyButton text={DONATE_MESSAGE} label="Sao chép nội dung chuyển khoản" />
                 </div>
                 <p id="donate-message-hint" className="text-xs text-paper/50">
                   Dán nội dung này vào ô lời nhắn khi chuyển. Mã QR không tự điền sẵn nội dung.

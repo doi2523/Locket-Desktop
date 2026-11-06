@@ -7,7 +7,7 @@ import { getStarCount } from '@/services/downloadService';
 /** Thứ tự link trùng với thứ tự các mục trên trang. */
 const LINKS: ReadonlyArray<{ href: string; label: string; heart?: boolean }> = [
   { href: '#hero', label: 'Trang chủ' },
-  { href: '#story', label: 'Câu chuyện' },
+  { href: '#about', label: 'Giới thiệu' },
   { href: '#download', label: 'Tải xuống' },
   { href: '#support', label: 'Ủng hộ', heart: true },
   { href: '#features', label: 'Tính năng' },
