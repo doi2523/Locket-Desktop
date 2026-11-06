@@ -25,6 +25,7 @@ export const Footer: React.FC = () => (
           <li><a href="#support" className={link}>Ủng hộ</a></li>
           <li><a href="#features" className={link}>Tính năng</a></li>
           <li><a href="#community" className={link}>Cộng đồng</a></li>
+          <li><a href="#ecosystem" className={link}>Hệ sinh thái</a></li>
         </ul>
       </nav>
 
