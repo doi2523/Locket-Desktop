@@ -64,14 +64,19 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ release, platforms, de
   };
 
   return (
-    <section id="hero" className="relative isolate pt-28 sm:pt-32 pb-10 lg:pb-14">
+    <section id="hero" className="relative isolate pt-20 sm:pt-24 pb-10 lg:pb-12">
       <div className="mx-auto grid max-w-7xl items-center gap-12 px-5 sm:px-8 lg:grid-cols-[1.05fr_1fr] lg:gap-8">
         <div>
-          <p className="enter eyebrow inline-flex items-center gap-2 rounded-full border border-paper/20 px-3.5 py-1.5 text-paper/80" style={{ '--d': '0s' } as React.CSSProperties}>
+          <p
+            className="enter eyebrow inline-flex items-center gap-2 rounded-full border border-paper/20 px-3.5 py-1.5 font-semibold text-paper/90"
+            style={{ '--d': '0s' } as React.CSSProperties}
+          >
             <span className="size-2 rounded-full bg-heart" aria-hidden="true" />
-            {release.version
-              ? `${release.version}${release.publishedAt ? ` · ${formatDate(release.publishedAt)}` : ''}`
-              : 'Miễn phí · mã nguồn mở'}
+            <span className="font-semibold">
+              {release.version
+                ? `${release.version}${release.publishedAt ? ` · ${formatDate(release.publishedAt)}` : ''}`
+                : 'v1.0.0 · 6/11/2026'}
+            </span>
           </p>
 
           <h1 className="t-hero mt-6 text-paper">

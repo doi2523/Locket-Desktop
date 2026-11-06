@@ -94,8 +94,8 @@ function buildPlatforms(assets: GithubAsset[]): PlatformDownload[] {
 }
 
 const FALLBACK_RELEASE: ReleaseInfo = {
-  version: null,
-  publishedAt: null,
+  version: 'v1.0.0',
+  publishedAt: '2026-11-06T00:00:00Z',
   notes: null,
   url: RELEASES_URL,
   totalDownloads: null,
