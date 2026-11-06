@@ -42,10 +42,6 @@
     ],
     "rewrites": [
       {
-        "source": "/sw.js",
-        "destination": "/sw.js"
-      },
-      {
         "source": "/sitemap.xml",
         "destination": "/sitemap.xml"
       },
