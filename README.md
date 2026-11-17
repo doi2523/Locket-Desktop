@@ -36,7 +36,8 @@ Always grab the latest version from the [Releases Page](https://github.com/doi25
 | :--- | :--- | :--- |
 | 🪟 **Windows** | [`LocketDio-Windows-Setup.exe`](https://github.com/doi2523/Locket-Desktop/releases/latest/download/LocketDio-Windows-Setup.exe) | Standard installer with automatic OTA updates. **Recommended.** |
 | 🪟 **Windows (portable)** | [`LocketDio-Windows-Portable.zip`](https://github.com/doi2523/Locket-Desktop/releases/latest/download/LocketDio-Windows-Portable.zip) | Standalone archive — extract and run anywhere without installing. |
-| 🍎 **macOS** | [`LocketDio-macOS.dmg`](https://github.com/doi2523/Locket-Desktop/releases/latest/download/LocketDio-macOS.dmg) | Disk image `.dmg` — open and drag into your *Applications* folder. |
+| 🍎 **macOS (Apple Silicon)** | [`LocketDio-macOS-AppleSilicon.dmg`](https://github.com/doi2523/Locket-Desktop/releases/latest/download/LocketDio-macOS-AppleSilicon.dmg) | Disk image `.dmg` for Apple Silicon (M1, M2, M3, M4...). **Recommended.** |
+| 🍎 **macOS (Intel)** | [`LocketDio-macOS-Intel.dmg`](https://github.com/doi2523/Locket-Desktop/releases/latest/download/LocketDio-macOS-Intel.dmg) | Disk image `.dmg` for Intel-based Mac computers. |
 
 ---
 
@@ -101,8 +102,11 @@ Always grab the latest version from the [Releases Page](https://github.com/doi25
 
 ### macOS
 
-1. Download [`LocketDio-macOS.dmg`](https://github.com/doi2523/Locket-Desktop/releases/latest/download/LocketDio-macOS.dmg), open the `.dmg`, and drag **Locket Dio** into your *Applications* folder.
-2. Because the app uses ad-hoc codesigning, right-click the app icon on the first launch and select **Open**, or run the quarantine removal command in Terminal:
+1. Download the disk image matching your Mac's chip:
+   - **Apple Silicon (M1/M2/M3/M4)**: [`LocketDio-macOS-AppleSilicon.dmg`](https://github.com/doi2523/Locket-Desktop/releases/latest/download/LocketDio-macOS-AppleSilicon.dmg)
+   - **Intel**: [`LocketDio-macOS-Intel.dmg`](https://github.com/doi2523/Locket-Desktop/releases/latest/download/LocketDio-macOS-Intel.dmg)
+2. Open the `.dmg` and drag **Locket Dio** into your *Applications* folder.
+3. Because the app uses ad-hoc codesigning, right-click the app icon on the first launch and select **Open**, or run the quarantine removal command in Terminal:
    ```bash
    xattr -cr "/Applications/Locket Dio.app"
    ```

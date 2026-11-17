@@ -10,10 +10,10 @@ import { ExploreSection } from '@/components/sections/ExploreSection';
 import { DownloadSection } from '@/components/sections/DownloadSection';
 import { SupportSection } from '@/components/sections/SupportSection';
 import { FALLBACK_DATA, getDownloadData } from '@/services/downloadService';
-import { detectPlatform } from '@/lib/platform';
+import { detectMacArchitecture, detectPlatform } from '@/lib/platform';
 import { Intro } from '@/components/Intro';
 import { shouldPlayIntro, useMotion } from '@/lib/motion';
-import type { DownloadData, PlatformId } from '@/types/download';
+import type { DownloadData, MacArchitecture, PlatformId } from '@/types/download';
 
 const PLAY_INTRO = shouldPlayIntro();
 if (PLAY_INTRO) document.documentElement.style.setProperty('--intro', '1s');
@@ -24,6 +24,7 @@ export default function App() {
   const [data, setData] = useState<DownloadData>(FALLBACK_DATA);
   const [loading, setLoading] = useState(true);
   const [detected] = useState<PlatformId | null>(detectPlatform);
+  const [detectedArch] = useState<MacArchitecture | null>(detectMacArchitecture);
   const [selectedPlatform, setSelectedPlatform] = useState<PlatformId>(detected ?? 'windows');
 
   useEffect(() => {
@@ -68,6 +69,7 @@ export default function App() {
           release={data.release}
           platforms={data.platforms}
           detected={detected}
+          detectedArch={detectedArch}
           onSelectPlatform={handleSelectPlatform}
         />
         <AboutSection />
@@ -77,6 +79,7 @@ export default function App() {
           platform={selectedPlatform}
           onPlatformChange={setSelectedPlatform}
           detected={detected}
+          detectedArch={detectedArch}
         />
         <SupportSection />
         <FeaturesSection />

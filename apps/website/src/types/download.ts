@@ -1,4 +1,5 @@
 export type PlatformId = 'windows' | 'macos';
+export type MacArchitecture = 'arm64' | 'x64';
 
 export interface DownloadFile {
   id: string;
@@ -8,6 +9,8 @@ export interface DownloadFile {
   downloadUrl: string;
   recommended?: boolean;
   description: string;
+  /** Kiến trúc vi xử lý (dành cho macOS): arm64 = Apple Silicon (chip M), x64 = Intel */
+  arch?: MacArchitecture;
   /** Các trường dưới đây chỉ có khi GitHub Releases trả về dữ liệu thật. */
   size?: string;
   checksum?: string;
@@ -29,6 +32,8 @@ export interface ReleaseInfo {
   notes: string | null;
   url: string;
   totalDownloads: number | null;
+  /** Tổng lượt tải của toàn bộ các release cộng lại. */
+  allReleasesTotalDownloads: number | null;
 }
 
 export interface DownloadData {

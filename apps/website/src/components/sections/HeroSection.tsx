@@ -3,12 +3,13 @@ import { ArrowDown, Download } from 'lucide-react';
 import { AppleIcon, WindowsIcon } from '@/components/icons/PlatformIcons';
 import { Button } from '@/components/ui/button';
 import { formatDate } from '@/lib/utils';
-import type { PlatformDownload, PlatformId, ReleaseInfo } from '@/types/download';
+import type { MacArchitecture, PlatformDownload, PlatformId, ReleaseInfo } from '@/types/download';
 
 interface HeroSectionProps {
   release: ReleaseInfo;
   platforms: PlatformDownload[];
   detected: PlatformId | null;
+  detectedArch?: MacArchitecture | null;
   onSelectPlatform: (platform: PlatformId) => void;
 }
 
@@ -47,10 +48,23 @@ const PRINTS = [
   },
 ] as const;
 
-export const HeroSection: React.FC<HeroSectionProps> = ({ release, platforms, detected, onSelectPlatform }) => {
+export const HeroSection: React.FC<HeroSectionProps> = ({ release, platforms, detected, detectedArch, onSelectPlatform }) => {
   const order: PlatformId[] = detected === 'macos' ? ['macos', 'windows'] : ['windows', 'macos'];
-  const fileFor = (id: PlatformId) => platforms.find((p) => p.platform === id)?.files.find((f) => f.recommended);
   const stageRef = React.useRef<HTMLDivElement>(null);
+
+  const macPlatform = platforms.find((p) => p.platform === 'macos');
+  const macFiles = macPlatform?.files ?? [];
+  const macArm = macFiles.find((f) => f.arch === 'arm64');
+  const macIntel = macFiles.find((f) => f.arch === 'x64');
+
+  // Bản macOS ưu tiên theo chip nhận diện được (hoặc mặc định Apple Silicon)
+  const macPrimaryFile = detectedArch === 'x64' ? (macIntel ?? macArm) : (macArm ?? macIntel);
+  const macAlternateFile = detectedArch === 'x64' ? macArm : macIntel;
+
+  const fileFor = (id: PlatformId) => {
+    if (id === 'macos') return macPrimaryFile ?? macFiles[0];
+    return platforms.find((p) => p.platform === id)?.files.find((f) => f.recommended);
+  };
 
   const onMove = (e: React.PointerEvent<HTMLDivElement>) => {
     if (e.pointerType !== 'mouse') return;
@@ -76,6 +90,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ release, platforms, de
               {release.version
                 ? `${release.version}${release.publishedAt ? ` · ${formatDate(release.publishedAt)}` : ''}`
                 : 'Miễn phí · mã nguồn mở'}
+              {release.allReleasesTotalDownloads ? ` · ${release.allReleasesTotalDownloads.toLocaleString('vi-VN')} lượt tải` : ''}
             </span>
           </p>
 
@@ -97,6 +112,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ release, platforms, de
             {order.map((id, i) => {
               const { Icon, label, ext } = PLATFORM[id];
               const primary = i === 0;
+              const isMac = id === 'macos';
+              const file = fileFor(id);
+              const chipSuffix = isMac
+                ? detectedArch === 'x64'
+                  ? 'Intel .dmg'
+                  : 'Chip M .dmg'
+                : ext;
+
               return (
                 <Button
                   key={id}
@@ -105,14 +128,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ release, platforms, de
                   size="xl"
                   className={`group justify-start gap-3 sm:justify-center ${primary ? '' : 'border-paper/30 bg-transparent text-paper hover:bg-paper/10'}`}
                 >
-                  <a href={fileFor(id)?.downloadUrl} onClick={() => onSelectPlatform(id)}>
+                  <a href={file?.downloadUrl} onClick={() => onSelectPlatform(id)}>
                     <Icon className="size-6 shrink-0" />
                     <span className="text-left leading-tight">
                       <span className="block text-[11px] font-medium uppercase tracking-wider opacity-70">
                         {primary && detected ? 'Dành cho máy của bạn' : 'Tải xuống cho'}
                       </span>
                       <span className="block text-lg">
-                        {label} <span className="font-mono text-sm opacity-60">{ext}</span>
+                        {label} <span className="font-mono text-sm opacity-60">{chipSuffix}</span>
                       </span>
                     </span>
                     <Download className="ml-auto size-5 shrink-0 transition-transform group-hover:translate-y-0.5 sm:ml-1" aria-hidden="true" />
@@ -122,12 +145,25 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ release, platforms, de
             })}
           </div>
 
+          {detected === 'macos' && macAlternateFile && (
+            <p className="enter mt-3 text-xs text-paper/70" style={{ '--d': '0.68s' } as React.CSSProperties}>
+              Dùng chip khác?{' '}
+              <a
+                href={macAlternateFile.downloadUrl}
+                className="font-medium text-butter underline underline-offset-2 hover:text-paper transition-colors"
+                onClick={() => onSelectPlatform('macos')}
+              >
+                Tải bản {detectedArch === 'x64' ? 'Apple Silicon (Chip M)' : 'Intel'} (.dmg)
+              </a>
+            </p>
+          )}
+
           <p className="enter mt-6 max-w-xl text-sm text-paper/60" style={{ '--d': '0.75s' } as React.CSSProperties}>
             {detected
               ? 'Tải trực tiếp từ GitHub Releases. '
               : 'Locket Dio chỉ chạy trên máy tính: hãy mở trang này bằng Windows hoặc macOS. '}
             <a href="#download" className="inline-flex items-center gap-1 font-medium text-paper underline decoration-heart decoration-2 underline-offset-4 hover:text-butter">
-              Bản portable và hướng dẫn cài đặt
+              Bản Chip M / Intel, portable và hướng dẫn cài đặt
               <ArrowDown className="size-3.5" aria-hidden="true" />
             </a>
           </p>

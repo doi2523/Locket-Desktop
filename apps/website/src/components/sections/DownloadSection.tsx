@@ -5,7 +5,7 @@ import { ReleaseNotes } from '@/components/ReleaseNotes';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { formatDate } from '@/lib/utils';
-import type { DownloadData, DownloadFile, PlatformDownload, PlatformId } from '@/types/download';
+import type { DownloadData, DownloadFile, MacArchitecture, PlatformDownload, PlatformId } from '@/types/download';
 
 interface DownloadSectionProps {
   data: DownloadData;
@@ -13,6 +13,7 @@ interface DownloadSectionProps {
   platform: PlatformId;
   onPlatformChange: (platform: PlatformId) => void;
   detected: PlatformId | null;
+  detectedArch?: MacArchitecture | null;
 }
 
 function FileIcon({ file }: { file: DownloadFile }) {
@@ -49,12 +50,23 @@ function ChecksumRow({ checksum }: { checksum: string }) {
   );
 }
 
-function FileCard({ file, delay }: { file: DownloadFile; delay: number }) {
+function FileCard({
+  file,
+  delay,
+  detectedArch,
+}: {
+  file: DownloadFile;
+  delay: number;
+  detectedArch?: MacArchitecture | null;
+}) {
   const [started, setStarted] = React.useState(false);
   const onClick = () => {
     setStarted(true);
     setTimeout(() => setStarted(false), 3500);
   };
+
+  const isMatchedArch = Boolean(file.arch && detectedArch && file.arch === detectedArch);
+  const isRecommended = isMatchedArch || (!detectedArch && file.recommended);
 
   return (
     <article
@@ -69,7 +81,12 @@ function FileCard({ file, delay }: { file: DownloadFile; delay: number }) {
           <div className="min-w-0 flex-1">
             <h3 className="t-h3 flex flex-wrap items-center gap-2 text-paper">
               {file.name}
-              {file.recommended && (
+              {isMatchedArch && (
+                <span className="rounded-full bg-butter px-2.5 py-0.5 font-sans text-[11px] font-bold uppercase tracking-wide text-ink shadow-sm">
+                  Chip máy bạn
+                </span>
+              )}
+              {file.recommended && !isMatchedArch && (
                 <span className="rounded-full bg-heart px-2.5 py-0.5 font-sans text-[11px] font-bold uppercase tracking-wide text-paper shadow-sm">
                   Khuyên dùng
                 </span>
@@ -102,9 +119,9 @@ function FileCard({ file, delay }: { file: DownloadFile; delay: number }) {
       <div className="space-y-3">
         <Button
           asChild
-          variant={file.recommended ? 'glow' : 'outline'}
+          variant={isRecommended ? 'glow' : 'outline'}
           size="lg"
-          className={`w-full gap-2 ${file.recommended ? '' : 'border border-paper/20 bg-paper/5 text-paper hover:bg-paper hover:text-ink'}`}
+          className={`w-full gap-2 ${isRecommended ? '' : 'border border-paper/20 bg-paper/5 text-paper hover:bg-paper hover:text-ink'}`}
         >
           <a href={file.downloadUrl} onClick={onClick}>
             {started ? (
@@ -127,12 +144,18 @@ function FileCard({ file, delay }: { file: DownloadFile; delay: number }) {
   );
 }
 
-function PlatformPanel({ platform }: { platform: PlatformDownload }) {
+function PlatformPanel({
+  platform,
+  detectedArch,
+}: {
+  platform: PlatformDownload;
+  detectedArch?: MacArchitecture | null;
+}) {
   return (
     <div className="mt-8 grid grid-cols-1 gap-6 sm:mt-10 lg:grid-cols-5">
       <div className="space-y-5 lg:col-span-3">
         {platform.files.map((f, i) => (
-          <FileCard key={f.id} file={f} delay={i * 0.08} />
+          <FileCard key={f.id} file={f} delay={i * 0.08} detectedArch={detectedArch} />
         ))}
       </div>
       <aside className="space-y-6 self-start rounded-3xl border border-paper/10 bg-ink-2 p-6 sm:p-8 lg:col-span-2">
@@ -151,6 +174,12 @@ function PlatformPanel({ platform }: { platform: PlatformDownload }) {
             ))}
           </ol>
         </div>
+        {platform.platform === 'macos' && (
+          <div className="rounded-2xl border border-paper/10 bg-ink-3/40 p-4 text-xs leading-relaxed text-paper/70">
+            <p className="font-semibold text-paper/90 mb-1">💡 Làm sao để biết máy Mac dùng chip nào?</p>
+            Bấm vào biểu tượng quả táo <strong></strong> ở góc trên bên trái màn hình ➔ chọn <strong>About This Mac</strong> (Giới thiệu về máy Mac này). Xem dòng <em>Chip</em> (Apple Silicon M1, M2, M3, M4...) hoặc <em>Processor</em> (Intel).
+          </div>
+        )}
       </aside>
     </div>
   );
@@ -180,20 +209,49 @@ function ReleaseSummary({ data, loading }: { data: DownloadData; loading: boolea
   }
 
   return (
-    <div className="space-y-3 rounded-3xl border border-paper/10 bg-ink-2 p-5 sm:p-6 text-paper shadow-sm">
-      <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
-        <span className="font-display text-lg font-bold">Phiên bản {release.version}</span>
-        {release.publishedAt && <span className="text-paper/70">Phát hành {formatDate(release.publishedAt)}</span>}
-        {release.totalDownloads !== null && (
-          <span className="text-paper/70">{release.totalDownloads.toLocaleString('vi-VN')} lượt tải</span>
-        )}
-        <a href={release.url} target="_blank" rel="noreferrer" className="ml-auto inline-flex items-center gap-1 font-semibold text-butter hover:underline">
-          Xem trên GitHub <ExternalLink className="size-3.5" aria-hidden="true" />
-        </a>
+    <div className="space-y-3.5 rounded-3xl border border-paper/10 bg-ink-2 p-5 sm:p-6 text-paper shadow-sm">
+      <div className="flex flex-wrap items-center justify-between gap-x-5 gap-y-3 text-sm">
+        {/* Nhóm trái: Phiên bản & Ngày phát hành */}
+        <div className="flex flex-wrap items-center gap-x-3.5 gap-y-1.5">
+          <span className="font-display text-lg font-bold text-paper">
+            Phiên bản {release.version}
+          </span>
+          {release.publishedAt && (
+            <span className="text-paper/60 text-xs sm:text-sm">
+              Phát hành {formatDate(release.publishedAt)}
+            </span>
+          )}
+        </div>
+
+        {/* Nhóm phải: Thống kê lượt tải & Xem trên GitHub */}
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+          {release.allReleasesTotalDownloads !== null && (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-butter/15 px-3 py-1 font-sans text-xs font-bold text-butter border border-butter/30 shadow-xs">
+              <Download className="size-3.5" aria-hidden="true" />
+              {release.allReleasesTotalDownloads.toLocaleString('vi-VN')} tổng lượt tải
+              {release.totalDownloads !== null && (
+                <span className="font-normal opacity-70">
+                  ({release.totalDownloads.toLocaleString('vi-VN')} ở bản này)
+                </span>
+              )}
+            </span>
+          )}
+          <a
+            href={release.url}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-1 text-xs sm:text-sm font-semibold text-butter hover:underline transition-colors"
+          >
+            Xem trên GitHub <ExternalLink className="size-3.5" aria-hidden="true" />
+          </a>
+        </div>
       </div>
+
       {release.notes && (
-        <details className="text-sm text-paper/80">
-          <summary className="cursor-pointer font-semibold text-paper hover:text-butter transition-colors">Có gì mới</summary>
+        <details className="text-sm text-paper/80 pt-2.5 border-t border-paper/10">
+          <summary className="cursor-pointer font-semibold text-paper/90 hover:text-butter transition-colors">
+            Có gì mới ở bản {release.version}?
+          </summary>
           <div className="mt-3 max-h-72 overflow-auto pr-1">
             <ReleaseNotes markdown={release.notes} />
           </div>
@@ -203,7 +261,7 @@ function ReleaseSummary({ data, loading }: { data: DownloadData; loading: boolea
   );
 }
 
-export const DownloadSection: React.FC<DownloadSectionProps> = ({ data, loading, platform, onPlatformChange, detected }) => {
+export const DownloadSection: React.FC<DownloadSectionProps> = ({ data, loading, platform, onPlatformChange, detected, detectedArch }) => {
   const trigger =
     'h-full cursor-pointer gap-2.5 rounded-xl px-4 font-display text-lg font-bold text-paper/70 transition-all data-[state=active]:bg-butter data-[state=active]:text-ink data-[state=active]:shadow-md hover:text-paper';
 
@@ -236,13 +294,17 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ data, loading,
             <TabsTrigger value="macos" className={trigger}>
               <AppleIcon className="size-5" />
               macOS
-              {detected === 'macos' && <span className="hidden font-sans text-[11px] font-semibold opacity-70 sm:inline">máy bạn</span>}
+              {detected === 'macos' && (
+                <span className="hidden font-sans text-[11px] font-semibold opacity-70 sm:inline">
+                  {detectedArch ? `máy bạn (${detectedArch === 'x64' ? 'Intel' : 'Chip M'})` : 'máy bạn'}
+                </span>
+              )}
             </TabsTrigger>
           </TabsList>
 
           {data.platforms.map((p) => (
             <TabsContent key={p.platform} value={p.platform} className="focus-visible:outline-none">
-              <PlatformPanel platform={p} />
+              <PlatformPanel platform={p} detectedArch={detectedArch} />
             </TabsContent>
           ))}
         </Tabs>

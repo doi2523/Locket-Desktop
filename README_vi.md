@@ -36,7 +36,8 @@ Luôn có bản mới nhất tại [trang Releases](https://github.com/doi2523/L
 | :--- | :--- | :--- |
 | 🪟 **Windows** | [`LocketDio-Windows-Setup.exe`](https://github.com/doi2523/Locket-Desktop/releases/latest/download/LocketDio-Windows-Setup.exe) | Bộ cài đặt tự động, hỗ trợ tự cập nhật (OTA). **Khuyên dùng.** |
 | 🪟 **Windows (portable)** | [`LocketDio-Windows-Portable.zip`](https://github.com/doi2523/Locket-Desktop/releases/latest/download/LocketDio-Windows-Portable.zip) | Bản nén giải nén chạy ngay, không cần cài đặt. |
-| 🍎 **macOS** | [`LocketDio-macOS.dmg`](https://github.com/doi2523/Locket-Desktop/releases/latest/download/LocketDio-macOS.dmg) | File ảnh đĩa `.dmg`, mở ra và kéo vào thư mục *Applications*. |
+| 🍎 **macOS (Apple Silicon)** | [`LocketDio-macOS-AppleSilicon.dmg`](https://github.com/doi2523/Locket-Desktop/releases/latest/download/LocketDio-macOS-AppleSilicon.dmg) | File ảnh đĩa `.dmg` cho chip Apple Silicon (M1, M2, M3, M4...). **Khuyên dùng.** |
+| 🍎 **macOS (Intel)** | [`LocketDio-macOS-Intel.dmg`](https://github.com/doi2523/Locket-Desktop/releases/latest/download/LocketDio-macOS-Intel.dmg) | File ảnh đĩa `.dmg` cho máy Mac dùng chip Intel. |
 
 ---
 
@@ -101,8 +102,11 @@ Luôn có bản mới nhất tại [trang Releases](https://github.com/doi2523/L
 
 ### macOS
 
-1. Tải [`LocketDio-macOS.dmg`](https://github.com/doi2523/Locket-Desktop/releases/latest/download/LocketDio-macOS.dmg), mở file `.dmg` và kéo biểu tượng **Locket Dio** vào thư mục *Applications*.
-2. Ứng dụng ký mã ad-hoc (chưa mua chứng chỉ Apple Developer), nên ở lần mở đầu tiên hãy **chuột phải vào app → chọn Mở (Open)**, hoặc mở Terminal và chạy lệnh gỡ cách ly:
+1. Tải file ảnh đĩa tương ứng với chip máy Mac của bạn:
+   - **Apple Silicon (M1/M2/M3/M4)**: [`LocketDio-macOS-AppleSilicon.dmg`](https://github.com/doi2523/Locket-Desktop/releases/latest/download/LocketDio-macOS-AppleSilicon.dmg)
+   - **Intel**: [`LocketDio-macOS-Intel.dmg`](https://github.com/doi2523/Locket-Desktop/releases/latest/download/LocketDio-macOS-Intel.dmg)
+2. Mở file `.dmg` và kéo biểu tượng **Locket Dio** vào thư mục *Applications*.
+3. Ứng dụng ký mã ad-hoc (chưa mua chứng chỉ Apple Developer), nên ở lần mở đầu tiên hãy **chuột phải vào app → chọn Mở (Open)**, hoặc mở Terminal và chạy lệnh gỡ cách ly:
    ```bash
    xattr -cr "/Applications/Locket Dio.app"
    ```

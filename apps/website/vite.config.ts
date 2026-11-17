@@ -10,23 +10,32 @@ import tailwindcss from '@tailwindcss/vite'
  */
 async function fetchLatestRelease() {
   try {
-    const res = await fetch('https://api.github.com/repos/doi2523/Locket-Desktop/releases/latest', {
+    const res = await fetch('https://api.github.com/repos/doi2523/Locket-Desktop/releases', {
       headers: { Accept: 'application/vnd.github+json' },
       signal: AbortSignal.timeout(8000),
     })
     if (!res.ok) return null
-    const r = (await res.json()) as {
+    const list = (await res.json()) as Array<{
       tag_name: string
       published_at: string | null
       body: string | null
       html_url: string
+      prerelease?: boolean
+      draft?: boolean
       assets: Array<{ name: string; size: number; download_count: number; browser_download_url: string; digest?: string | null }>
-    }
+    }>
+    if (!Array.isArray(list) || list.length === 0) return null
+    const r = list.find((item) => !item.prerelease && !item.draft) ?? list[0]
+    const allDownloads = list.reduce(
+      (sum, rel) => sum + (rel.assets ? rel.assets.reduce((s, a) => s + (a.download_count || 0), 0) : 0),
+      0
+    )
     return {
       tag_name: r.tag_name,
       published_at: r.published_at,
       body: r.body,
       html_url: r.html_url,
+      all_releases_total_downloads: allDownloads,
       assets: r.assets.map((a) => ({
         name: a.name,
         size: a.size,
