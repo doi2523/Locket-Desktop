@@ -3,9 +3,10 @@ import * as React from 'react';
 export const GithubIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => {
   return (
     <svg
-      role="img"
       viewBox="0 0 24 24"
       fill="currentColor"
+      aria-hidden="true"
+      focusable="false"
       className="w-5 h-5"
       {...props}
     >
